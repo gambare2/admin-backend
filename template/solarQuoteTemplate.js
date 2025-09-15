@@ -301,6 +301,29 @@ module.exports = function generateSolarQuoteHTML(proposal) {
     </p>
   </section>
 </section>
+<div style="page-break-before: always;"></div>
+
+<!-- Terms & Conditions -->
+    <img src="${API_URL}/assets/logo.png" class="h-16" />
+<section class="mt-8 text-xl">
+  <h2 class="text-2xl font-bold text-[#0a4b78]">Terms &</h2>
+  <h3 class="text-xl font-semibold text-gray-800">Conditions</h3>
+  <div class="h-0.5 w-12 bg-[#0a4b78] mt-1 mb-4"></div>
+
+  <ul class="list-disc pl-6 text-sm text-gray-700 leading-relaxed space-y-1">
+    <li>Packing is included in the offer.</li>
+    <li>Transportation charges are in our scope.</li>
+    <li>Civil and digging are in our scope.</li>
+    <li>Price quotes are firm and valid for 10 days from the date of offer. After this period, reconfirmation from our office should be taken.</li>
+    <li>Water supply at site will be provided by the customer free of cost during installation and commissioning.</li>
+    <li>Closed, covered, locked stores will be provided by the customer during installation and commissioning.</li>
+    <li>Approval process will start once order confirmation is received. From confirmation till 10 days before installation day 1, cancellation charges of INR 25,000 or 5% of system cost (whichever is higher) will apply.</li>
+    <li>Delivery: 2–3 weeks from the date of technically and commercially cleared order.</li>
+    <li>Force Majeure: This quotation and contract are subject to standard force majeure conditions.</li>
+    <li>Includes licensing charges.</li>
+  </ul>
+</section>
+
 
   </body>
   </html>
