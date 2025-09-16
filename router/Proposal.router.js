@@ -99,7 +99,7 @@ router.get("/proposals/:id/pdf", async (req, res) => {
     const browser = await puppeteer.launch({
       args: chromium.args,
       defaultViewport: chromium.defaultViewport,
-      executablePath: await chromium.executablePath(), // gets the right Chromium path
+      executablePath: await chromium.executablePath(), 
       headless: chromium.headless,
     });
 

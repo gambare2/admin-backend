@@ -5,12 +5,12 @@ const API_URL = process.env.VITE_API_URL;
 
 
 module.exports = function generateSolarQuoteHTML(proposal) {
-// inside generateSolarQuoteHTML(proposal)
+  // inside generateSolarQuoteHTML(proposal)
 
-const productRows = proposal.products?.map(p => {
-  const qty = p.qty || 1;
-  const amount = qty * (p.price || 0);
-  return `
+  const productRows = proposal.products?.map(p => {
+    const qty = p.qty || 1;
+    const amount = qty * (p.price || 0);
+    return `
     <tr>
       <td class="border p-2">${p.name}</td>
       <td class="border p-2 text-right">₹${p.price?.toLocaleString() || 0}</td>
@@ -18,13 +18,13 @@ const productRows = proposal.products?.map(p => {
       <td class="border p-2 text-right">₹${amount.toLocaleString()}</td>
     </tr>
   `;
-}).join("") || "";
+  }).join("") || "";
 
-// services may not have qty, so default to 1
-const serviceRows = proposal.services?.map(s => {
-  const qty = s.qty || 1;
-  const amount = qty * (s.price || 0);
-  return `
+  // services may not have qty, so default to 1
+  const serviceRows = proposal.services?.map(s => {
+    const qty = s.qty || 1;
+    const amount = qty * (s.price || 0);
+    return `
     <tr>
       <td class="border p-2">${s.name}</td>
       <td class="border p-2 text-right">₹${s.price?.toLocaleString() || 0}</td>
@@ -32,21 +32,21 @@ const serviceRows = proposal.services?.map(s => {
       <td class="border p-2 text-right">₹${amount.toLocaleString()}</td>
     </tr>
   `;
-}).join("") || "";
+  }).join("") || "";
 
-// calculate totals
-const subtotal =
-  (proposal.products?.reduce((sum, p) => sum + (p.qty || 1) * (p.price || 0), 0) || 0) +
-  (proposal.services?.reduce((sum, s) => sum + (s.qty || 1) * (s.price || 0), 0) || 0);
+  // calculate totals
+  const subtotal =
+    (proposal.products?.reduce((sum, p) => sum + (p.qty || 1) * (p.price || 0), 0) || 0) +
+    (proposal.services?.reduce((sum, s) => sum + (s.qty || 1) * (s.price || 0), 0) || 0);
 
-const gstPercent = 12;
-const gstAmount = (subtotal * gstPercent) / 100;
-const totalCost = subtotal + gstAmount;
+  const gstPercent = 12;
+  const gstAmount = (subtotal * gstPercent) / 100;
+  const totalCost = subtotal + gstAmount;
 
-const subsidy = proposal.costs?.subsidy || 0;
-const netPayable = totalCost - subsidy;
+  const subsidy = proposal.costs?.subsidy || 0;
+  const netPayable = totalCost - subsidy;
 
-const amountInWords = proposal.costs?.amountInWords || "";
+  const amountInWords = proposal.costs?.amountInWords || "";
 
   return `
   <!doctype html>
@@ -67,9 +67,11 @@ const amountInWords = proposal.costs?.amountInWords || "";
         <img src="${API_URL}/assets/logo.png" class="h-16" />
         <div class="text-right text-[11px]">
           <strong class="text-[14px] block">SUNMAYO PRIVATE LIMITED</strong>
-          26/18 Laxmi Garden, Sector 11, Gurgaon, Haryana 122001<br/>
+         Shop No. 02 Opposite M3M Urbana Premium,<br/> 
+         Old Kadarpur Road, Sector 64,<br/>
+          Badshahpur, Gurgaon, Haryana 122101<br/>
           Contact: +91 9643800850<br/>
-          Mail: info@sunmayo.com<br/>
+          Mail us at: info@sunmayo.com<br/>
           www.sunmayo.com
         </div>
       </header>
@@ -196,7 +198,7 @@ const amountInWords = proposal.costs?.amountInWords || "";
   <div class="mt-8 text-lg">
     <p class="font-bold">Thanks & Regards,</p>
     <p class="font-medium">SunMayo Private Limited</p>
-    <p class="text-lg">+91 9971490782</p>
+    <p class="text-lg">+91 9643800850</p>
     <p class="uppercase font-semibold">SUNMAYO PRIVATE LIMITED</p>
   </div>
 </div>
@@ -204,30 +206,35 @@ const amountInWords = proposal.costs?.amountInWords || "";
 <!-- Project Details -->
 <div style="page-break-before: always;"></div>
    <div class="max-w-3xl w-full bg-white p-10 text-lg ">
-  <!-- Header -->
-  <div class="flex justify-between items-center mb-6">
-    <div>
-      <h1 class="text-3xl font-bold text-[#0a4b78]">${proposal.specification || 0}KW</h1>
-      <p class="text-gray-600 text-xl">Specification</p>
-    </div>
-    <img src="${API_URL}/assets/logo.png" class="h-16" />
+ <!-- Header -->
+<div class="flex justify-between items-center mb-6">
+  <div>
+    <h1 class="text-3xl font-bold text-[#0a4b78]">
+      ${proposal.products?.[0]?.specification || 0}KW
+    </h1>
+    <p class="text-gray-600 text-xl">Specification</p>
   </div>
+  <img src="${API_URL}/assets/logo.png" class="h-16" />
+</div>
 
-  <!-- Specification Grid -->
-  <div class="grid grid-cols-3 gap-6 mb-8">
-    <div>
-      <p class="text-gray-600">Plant Capacity:</p>
-      <p class="font-bold text-[#0a4b78]">${proposal.specification || 0}KW</p>
-    </div>
-    <div>
-      <p class="text-gray-600">Structure Type:</p>
-      <p class="font-bold text-[#0a4b78]">Elevated</p>
-    </div>
-    <div>
-      <p class="text-gray-600">Project Details:</p>
-      <p class="font-bold text-[#0a4b78]">${proposal.name || "Project Name"}</p>
-    </div>
+<!-- Specification Grid -->
+<div class="grid grid-cols-3 gap-6 mb-8">
+  <div>
+    <p class="text-gray-600">Plant Capacity:</p>
+    <p class="font-bold text-[#0a4b78]">
+      ${proposal.products?.reduce((sum, p) => sum + (p.specification || 0), 0)}KW
+    </p>
   </div>
+  <div>
+    <p class="text-gray-600">Structure Type:</p>
+    <p class="font-bold text-[#0a4b78]">${proposal.structureType || "Elevated"}</p>
+  </div>
+  <div>
+    <p class="text-gray-600">Project Details:</p>
+    <p class="font-bold text-[#0a4b78]">${proposal.name || "Project Name"}</p>
+  </div>
+</div>
+
 
   <!-- Map + Design Preview -->
   <div class="grid grid-cols-2 gap-6 mb-10">
@@ -290,9 +297,9 @@ const amountInWords = proposal.costs?.amountInWords || "";
     <tbody>
       <!-- Products -->
       ${proposal.products?.map(p => {
-        const qty = p.qty || 1;
-        const amount = qty * (p.price || 0);
-        return `
+    const qty = p.qty || 1;
+    const amount = qty * (p.price || 0);
+    return `
           <tr>
             <td class="border p-2">${p.name}</td>
             <td class="border p-2 text-right">₹${p.price?.toLocaleString() || 0}</td>
@@ -300,13 +307,13 @@ const amountInWords = proposal.costs?.amountInWords || "";
             <td class="border p-2 text-right">₹${amount.toLocaleString()}</td>
           </tr>
         `;
-      }).join("") || ""}
+  }).join("") || ""}
 
       <!-- Services -->
       ${proposal.services?.map(s => {
-        const qty = s.qty || 1;
-        const amount = qty * (s.price || 0);
-        return `
+    const qty = s.qty || 1;
+    const amount = qty * (s.price || 0);
+    return `
           <tr>
             <td class="border p-2">${s.name}</td>
             <td class="border p-2 text-right">₹${s.price?.toLocaleString() || 0}</td>
@@ -314,7 +321,7 @@ const amountInWords = proposal.costs?.amountInWords || "";
             <td class="border p-2 text-right">₹${amount.toLocaleString()}</td>
           </tr>
         `;
-      }).join("") || ""}
+  }).join("") || ""}
 
       <!-- Totals -->
       <tr>
@@ -351,7 +358,7 @@ const amountInWords = proposal.costs?.amountInWords || "";
     <p class="text-sm leading-relaxed">
       As a percentage of the Net Value of System:
       ${proposal.paymentSchedule?.map(p => `${p.percent}% — ${p.stage}`).join(", ") ||
-        "30% advance along with Purchase Order, 65% Before Dispatch, 5% after installation"}
+    "30% advance along with Purchase Order, 65% Before Dispatch, 5% after installation"}
     </p>
   </section>
 
@@ -391,6 +398,31 @@ const amountInWords = proposal.costs?.amountInWords || "";
     <li>Includes licensing charges.</li>
   </ul>
 </section>
+<div style="page-break-before: always;"></div>
+
+<div class="w-full h-screen relative font-sans">
+ <!-- Logo -->
+  <div class="absolute top-40 left-10">
+   <img src="${API_URL}/assets/logo.png" class="h-16" />
+  </div>
+  <!-- Top Title Section -->
+  <img src = "${API_URL}/assets/Panel-logo.png" alt="Solar Panel" class="h-16"/>
+
+  <!-- Company Info -->
+  <div class="absolute top-12 right-10 text-sm text-gray-700 space-y-2 max-w-[200px]">
+    <p>Address: 26/18 Laxmi Garden, Sector 11,<br>Gurgaon, Haryana 122001</p>
+    <p>Contact No: +919643800850</p>
+    <p>Mail: info@sunmayo.com</p>
+    <p>Visit us on: www.sunmayo.com</p>
+  </div>
+
+
+  <!-- Bottom Image -->
+  <div class="absolute bottom-0 left-0 w-full">
+    <img src="${API_URL}/assets/solar-panel.jpg" alt="Solar" class="w-full h-[250px] object-cover" />
+  </div>
+</div>
+
 
 
   </body>
