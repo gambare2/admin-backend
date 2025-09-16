@@ -147,13 +147,13 @@ router.put("/:id", async (req, res) => {
 // ➕ Add Employee
 router.post("/add-employee", async (req, res) => {
   try {
-    const { name, email, password } = req.body;
-    if (!name || !email || !password) {
+    const { name, email, password, phoneno } = req.body;
+    if (!name || !email || !password || !phoneno) {
       return res.status(400).json({ error: "All fields are required" });
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
-    const employee = new Employee({ name, email, password: hashedPassword });
+    const employee = new Employee({ name, email, password: hashedPassword, phoneno });
     await employee.save();
 
     res.json({ message: "Employee added successfully", employee });
@@ -166,10 +166,10 @@ router.post("/add-employee", async (req, res) => {
 
 router.get("/employees", async (req, res) => {
   try {
-    const employees = await Employee.find();
-    res.json(employees);
+    const employees = await Employee.find({}, "-password");
+    res.status(200).json(employees);
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    res.status(500).json({ error: "Failed to fetch employees", details: err.message });
   }
 });
 
@@ -187,12 +187,13 @@ router.delete("/employees/:id", async (req, res) => {
 
 router.put("/employees/:id", async (req, res) => {
   try {
-    const { name, email, password } = req.body;
+    const { name, email, password, phoneno } = req.body;
     const updatedFields = {};
 
     if (name) updatedFields.name = name;
     if (email) updatedFields.email = email;
     if (password) updatedFields.password = password;
+    if (phoneno) updatedFields.phoneno = phoneno;
 
     const updatedEmployee = await Employee.findByIdAndUpdate(
       req.params.id,

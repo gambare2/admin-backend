@@ -13,22 +13,14 @@ const app = express();
 
 
 app.use(express.json());
+
+
 app.use(cors({
   // origin: ["http://localhost:5173", "http://localhost:3000"],
   origin: process.env.FRONTEND_URL,
   credentials: true,
 }));
 
-// Debug middleware for CORS / Origin issues
-app.use((req, res, next) => {
-  console.log("🔎 Incoming Request:");
-  console.log("URL:", req.originalUrl);
-  console.log("Method:", req.method);
-  console.log("Origin Header:", req.headers.origin);
-  console.log("Referer Header:", req.headers.referer);
-  console.log("User-Agent:", req.headers["user-agent"]);
-  next();
-});
 
 
 
