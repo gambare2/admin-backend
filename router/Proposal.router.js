@@ -60,6 +60,58 @@ router.post("/add-proposal", async (req, res) => {
   }
 });
 
+// update proposal 
+// ❇️ Update Proposal
+router.put("/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const {
+      clientName,
+      clientPhone,
+      clientEmail,
+      clientAddress,
+      projectDetails,
+      budget,
+      services,
+      products,
+      employees,
+    } = req.body;
+
+    // Basic validation
+    if (!clientName || !clientPhone || !clientEmail || !clientAddress || !projectDetails || !budget) {
+      return res.status(400).json({
+        error: "All client and project fields are required: name, phone, email, address, project details, budget",
+      });
+    }
+
+    const updatedProposal = await Proposal.findByIdAndUpdate(
+      id,
+      {
+        clientName,
+        clientPhone,
+        clientEmail,
+        clientAddress,
+        projectDetails,
+        budget,
+        services: Array.isArray(services) ? services : [],
+        products: Array.isArray(products) ? products : [],
+        employees: Array.isArray(employees) ? employees : [],
+      },
+      { new: true } // return the updated document
+    ).populate("services products employees");
+
+    if (!updatedProposal) {
+      return res.status(404).json({ error: "Proposal not found" });
+    }
+
+    res.json({ message: "Proposal updated successfully", proposal: updatedProposal });
+  } catch (err) {
+    console.error("❌ Error updating proposal:", err);
+    res.status(500).json({ error: err.message });
+  }
+});
+
+
   
   
   // 📋 Get Proposals
