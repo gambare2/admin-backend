@@ -1,8 +1,53 @@
 const path = require("path");
 const API_URL = process.env.VITE_API_URL;
-// const API_URL = "http://localhost:5000"
+// const API_URL = "http://localhost:5000";
+
+
 
 module.exports = function generateSolarQuoteHTML(proposal) {
+// inside generateSolarQuoteHTML(proposal)
+
+const productRows = proposal.products?.map(p => {
+  const qty = p.qty || 1;
+  const amount = qty * (p.price || 0);
+  return `
+    <tr>
+      <td class="border p-2">${p.name}</td>
+      <td class="border p-2 text-right">₹${p.price?.toLocaleString() || 0}</td>
+      <td class="border p-2 text-right">${qty}</td>
+      <td class="border p-2 text-right">₹${amount.toLocaleString()}</td>
+    </tr>
+  `;
+}).join("") || "";
+
+// services may not have qty, so default to 1
+const serviceRows = proposal.services?.map(s => {
+  const qty = s.qty || 1;
+  const amount = qty * (s.price || 0);
+  return `
+    <tr>
+      <td class="border p-2">${s.name}</td>
+      <td class="border p-2 text-right">₹${s.price?.toLocaleString() || 0}</td>
+      <td class="border p-2 text-right">${qty}</td>
+      <td class="border p-2 text-right">₹${amount.toLocaleString()}</td>
+    </tr>
+  `;
+}).join("") || "";
+
+// calculate totals
+const subtotal =
+  (proposal.products?.reduce((sum, p) => sum + (p.qty || 1) * (p.price || 0), 0) || 0) +
+  (proposal.services?.reduce((sum, s) => sum + (s.qty || 1) * (s.price || 0), 0) || 0);
+
+const gstPercent = 12;
+const gstAmount = (subtotal * gstPercent) / 100;
+const totalCost = subtotal + gstAmount;
+
+const subsidy = proposal.costs?.subsidy || 0;
+const netPayable = totalCost - subsidy;
+
+const amountInWords = proposal.costs?.amountInWords || "";
+
   return `
   <!doctype html>
   <html lang="en">
@@ -232,51 +277,72 @@ module.exports = function generateSolarQuoteHTML(proposal) {
     Price Quote & Payment schedule for <strong>${proposal.plantCapacity || "5 KW"} Grid Tie Rooftop Solar System:</strong>
   </p>
 
-  <!-- Table -->
-  <table class="w-full border-collapse text-sm">
-    <thead class="bg-[#0a4b78] text-white">
+ <!-- Table -->
+  <table class="w-full border-collapse mt-4 text-sm">
+    <thead class="bg-gray-100">
       <tr>
-        <th class="border p-2 text-left">Description</th>
-        <th class="border p-2 text-right">Price per KW</th>
-        <th class="border p-2 text-right">Quantity</th>
-        <th class="border p-2 text-right">Subtotal</th>
+        <th class="border p-2 text-left">Item</th>
+        <th class="border p-2 text-right">Price</th>
+        <th class="border p-2 text-right">Qty</th>
+        <th class="border p-2 text-right">Amount</th>
       </tr>
     </thead>
     <tbody>
-      ${proposal.products?.map(p => `
-        <tr>
-          <td class="border p-2">${p.name}</td>
-          <td class="border p-2 text-right">₹${p.price}</td>
-          <td class="border p-2 text-right">${p.qty}</td>
-          <td class="border p-2 text-right">₹${(p.qty * p.price).toLocaleString()}</td>
-        </tr>
-      `).join("")}
+      <!-- Products -->
+      ${proposal.products?.map(p => {
+        const qty = p.qty || 1;
+        const amount = qty * (p.price || 0);
+        return `
+          <tr>
+            <td class="border p-2">${p.name}</td>
+            <td class="border p-2 text-right">₹${p.price?.toLocaleString() || 0}</td>
+            <td class="border p-2 text-right">${qty}</td>
+            <td class="border p-2 text-right">₹${amount.toLocaleString()}</td>
+          </tr>
+        `;
+      }).join("") || ""}
+
+      <!-- Services -->
+      ${proposal.services?.map(s => {
+        const qty = s.qty || 1;
+        const amount = qty * (s.price || 0);
+        return `
+          <tr>
+            <td class="border p-2">${s.name}</td>
+            <td class="border p-2 text-right">₹${s.price?.toLocaleString() || 0}</td>
+            <td class="border p-2 text-right">${qty}</td>
+            <td class="border p-2 text-right">₹${amount.toLocaleString()}</td>
+          </tr>
+        `;
+      }).join("") || ""}
+
+      <!-- Totals -->
       <tr>
         <td colspan="3" class="border p-2 font-medium">Subtotal</td>
-        <td class="border p-2 text-right">₹${proposal.costs?.subtotal || 0}</td>
+        <td class="border p-2 text-right">₹${subtotal.toLocaleString()}</td>
       </tr>
       <tr>
-        <td colspan="3" class="border p-2 font-medium">Tax GST (${proposal.costs?.gstPercent || 0}%)</td>
-        <td class="border p-2 text-right">₹${proposal.costs?.gstAmount || 0}</td>
+        <td colspan="3" class="border p-2 font-medium">Tax GST (${gstPercent}%)</td>
+        <td class="border p-2 text-right">₹${gstAmount.toLocaleString()}</td>
       </tr>
       <tr class="font-semibold">
         <td colspan="3" class="border p-2">Total Cost</td>
-        <td class="border p-2 text-right">₹${proposal.costs?.totalCost || 0}</td>
+        <td class="border p-2 text-right">₹${totalCost.toLocaleString()}</td>
       </tr>
       <tr>
         <td colspan="3" class="border p-2">Subsidy</td>
-        <td class="border p-2 text-right text-red-600">- ₹${proposal.costs?.subsidy || 0}</td>
+        <td class="border p-2 text-right text-red-600">- ₹${subsidy.toLocaleString()}</td>
       </tr>
       <tr class="bg-[#0a4b78] text-white font-bold">
         <td colspan="3" class="border p-2">Total</td>
-        <td class="border p-2 text-right">₹${proposal.costs?.netPayable || 0}</td>
+        <td class="border p-2 text-right">₹${netPayable.toLocaleString()}</td>
       </tr>
     </tbody>
   </table>
 
   <!-- Amount in words -->
   <div class="mt-2 text-sm font-medium">
-    Amount in Words: ${proposal.costs?.amountInWords || ""}
+    Amount in Words: ${amountInWords}
   </div>
 
   <!-- Payment Schedule -->
@@ -288,6 +354,7 @@ module.exports = function generateSolarQuoteHTML(proposal) {
         "30% advance along with Purchase Order, 65% Before Dispatch, 5% after installation"}
     </p>
   </section>
+
 
   <!-- Bank Details -->
   <section class="mt-6">

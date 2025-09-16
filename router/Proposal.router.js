@@ -1,7 +1,8 @@
 const express = require("express");
 const router = express.Router();
 const Proposal = require("../models/Proposal.model.js");
-const puppeteer = require("puppeteer");
+const chromium = require("@sparticuz/chromium");
+const puppeteer = require("puppeteer-core");
 const path = require("path");
 const fs = require("fs");
 const generateSolarQuoteHTML = require("../template/solarQuoteTemplate.js");
@@ -88,11 +89,20 @@ router.get("/proposals/:id/pdf", async (req, res) => {
       .populate("products")
       .populate("employees");
 
-    if (!proposal) return res.status(404).json({ error: "Proposal not found" });
+    if (!proposal) {
+      return res.status(404).json({ error: "Proposal not found" });
+    }
 
     const html = generateSolarQuoteHTML(proposal);
 
-    const browser = await puppeteer.launch();
+    // ✅ Launch Puppeteer with Chromium for Render
+    const browser = await puppeteer.launch({
+      args: chromium.args,
+      defaultViewport: chromium.defaultViewport,
+      executablePath: await chromium.executablePath(), // gets the right Chromium path
+      headless: chromium.headless,
+    });
+
     const page = await browser.newPage();
     await page.setContent(html, { waitUntil: "networkidle0" });
 
@@ -104,14 +114,18 @@ router.get("/proposals/:id/pdf", async (req, res) => {
 
     await browser.close();
 
+    const fileName =
+      proposal.clientName?.replace(/\s+/g, "_") || "proposal";
+
     res.set({
       "Content-Type": "application/pdf",
-      "Content-Disposition": `inline; filename=proposal_${proposal.clientName}.pdf`,
+      "Content-Disposition": `inline; filename=${fileName}.pdf`,
     });
+
     res.send(pdfBuffer);
   } catch (err) {
     console.error("PDF Error:", err);
-    res.status(500).json({ error: err.message });
+    res.status(500).json({ error: "Failed to generate PDF" });
   }
 });
 
