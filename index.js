@@ -25,8 +25,8 @@ const app = express();
 app.use(express.json());
 
 app.use(cors({
-  origin: ["http://localhost:5173", "http://localhost:3000"],
-  // origin: process.env.FRONTEND_URL,
+  // origin: ["http://localhost:5173", "http://localhost:3000"],
+  origin: process.env.FRONTEND_URL,
   credentials: true,
 }));
 app.use(bodyParser.json({ limit: "10mb" }));
