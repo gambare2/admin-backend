@@ -5,24 +5,31 @@ const cors = require("cors");
 const adminRoutes = require("./router/Admin.router.js");
 const serviceRoutes = require("./router/services.router.js")
 const proposalRouter = require("./router/Proposal.router.js")
+const graphRouter = require("./router/Graph.router.js")
 const path = require("path");
+const bodyParser = require("body-parser")
+const fs = require("fs")
+
+const uploadsDir = path.join(__dirname, "uploads");
+
+// Ensure uploads folder exists
+if (!fs.existsSync(uploadsDir)) {
+  fs.mkdirSync(uploadsDir, { recursive: true });
+}
+
 
 dotenv.config();
 
 const app = express();
 
-
 app.use(express.json());
 
-
 app.use(cors({
-  // origin: ["http://localhost:5173", "http://localhost:3000"],
-  origin: process.env.FRONTEND_URL,
+  origin: ["http://localhost:5173", "http://localhost:3000"],
+  // origin: process.env.FRONTEND_URL,
   credentials: true,
 }));
-
-
-
+app.use(bodyParser.json({ limit: "10mb" }));
 
 // Health Check
 app.get("/", (req, res) => {
@@ -37,6 +44,26 @@ app.use("/api/service", serviceRoutes);
 app.use("/api/proposal", proposalRouter);
 
 app.use("/assets", express.static(path.join(__dirname, "template/assets")));
+
+app.use("/upload", graphRouter );
+
+app.post("/api/upload-table-image", (req, res) => {
+  try {
+    const { image } = req.body; // base64 data URL
+    const base64Data = image.replace(/^data:image\/png;base64,/, "");
+    const fileName = `table-${Date.now()}.png`;
+    const filePath = path.join(__dirname, "uploads", fileName);
+
+    fs.writeFileSync(filePath, base64Data, "base64");
+
+    // you could also store filePath or Buffer in DB here
+    res.json({ success: true, file: fileName });
+  } catch (err) {
+    console.error(err);
+    console.error(err.message)
+    res.status(500).json({ success: false });
+  }
+});
 
 const PORT = process.env.PORT || 5000;
 mongoose

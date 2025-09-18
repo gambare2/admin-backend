@@ -7,7 +7,7 @@ const path = require("path");
 const fs = require("fs");
 const generateSolarQuoteHTML = require("../template/solarQuoteTemplate.js");
 
- 
+// 📌 Add Proposal
 router.post("/add-proposal", async (req, res) => {
   try {
     const {
@@ -15,126 +15,163 @@ router.post("/add-proposal", async (req, res) => {
       clientPhone,
       clientEmail,
       clientAddress,
-      projectDetails,
-      budget,
+      customerType,
+      projectsize,
+      consumption,
+      electricity,
+      generation,
+      Wattpeak,
+      proposalWattpeak,
+      warranty,
+      performancewarranty,
+      Invertorwarranty,
+      InvertorSize,
+      quantity,
+      invertorquantitiy,
+      proposalStructure,
+      structureDes,
+      systemwarranty,
+      stage1,
+      stage2,
+      stage3,
+      stage4,
+      yearlyconsumption,
+      yearlysolargeneration,
+      decrementgeneration,
+      plotgraph,
+      directionType,
+      priceincrement,
+      graphType,
       services,
       products,
       employees,
+      balanceOfSystem,
+      ourScope,
+      customerScope,
     } = req.body;
 
-    console.log("📌 Incoming request:", req.body);
-
-    // Basic validation
-    if (!clientName || !clientPhone || !clientEmail || !clientAddress || !projectDetails || !budget) {
+    // Validation (only required fields)
+    if (!clientName || !clientPhone || !clientEmail || !clientAddress) {
       return res.status(400).json({
-        error: "All client and project fields are required: name, phone, email, address, project details, budget",
+        error: "clientName, clientPhone, clientEmail, and clientAddress are required.",
       });
     }
-
-
-    const validServices = Array.isArray(services) ? services : [];
-    const validProducts = Array.isArray(products) ? products : [];
-    const validEmployees = Array.isArray(employees) ? employees : [];
 
     const proposal = new Proposal({
       clientName,
       clientPhone,
       clientEmail,
       clientAddress,
-      projectDetails,
-      budget,
-      services: validServices,
-      products: validProducts,
-      employees: validEmployees,
+      customerType,
+      projectsize,
+      consumption,
+      electricity,
+      generation,
+      Wattpeak,
+      proposalWattpeak,
+      warranty,
+      performancewarranty,
+      Invertorwarranty,
+      InvertorSize,
+      quantity,
+      invertorquantitiy,
+      proposalStructure,
+      structureDes,
+      systemwarranty,
+      stage1,
+      stage2,
+      stage3,
+      stage4,
+      yearlyconsumption,
+      yearlysolargeneration,
+      decrementgeneration,
+      plotgraph,
+      directionType,
+      priceincrement,
+      graphType,
+      services: Array.isArray(services) ? services : [],
+      products: Array.isArray(products) ? products : [],
+      employees: Array.isArray(employees) ? employees : [],
+      balanceOfSystem,
+      ourScope,
+      customerScope,
     });
 
     await proposal.save();
-
-    // Populate references for better response
     await proposal.populate("services products employees");
 
-    res.json({ message: "Proposal added successfully", proposal });
+    res.json({ message: "✅ Proposal added successfully", proposal });
   } catch (err) {
     console.error("❌ Error saving proposal:", err);
     res.status(500).json({ error: err.message });
   }
 });
 
-// update proposal 
-// ❇️ Update Proposal
+// 📌 Update Proposal
 router.put("/:id", async (req, res) => {
   try {
     const { id } = req.params;
-    const {
-      clientName,
-      clientPhone,
-      clientEmail,
-      clientAddress,
-      projectDetails,
-      budget,
-      services,
-      products,
-      employees,
-    } = req.body;
+    const updateData = req.body;
 
-    // Basic validation
-    if (!clientName || !clientPhone || !clientEmail || !clientAddress || !projectDetails || !budget) {
-      return res.status(400).json({
-        error: "All client and project fields are required: name, phone, email, address, project details, budget",
-      });
-    }
-
-    const updatedProposal = await Proposal.findByIdAndUpdate(
-      id,
-      {
-        clientName,
-        clientPhone,
-        clientEmail,
-        clientAddress,
-        projectDetails,
-        budget,
-        services: Array.isArray(services) ? services : [],
-        products: Array.isArray(products) ? products : [],
-        employees: Array.isArray(employees) ? employees : [],
-      },
-      { new: true } // return the updated document
-    ).populate("services products employees");
+    const updatedProposal = await Proposal.findByIdAndUpdate(id, updateData, {
+      new: true,
+    }).populate("services products employees");
 
     if (!updatedProposal) {
       return res.status(404).json({ error: "Proposal not found" });
     }
 
-    res.json({ message: "Proposal updated successfully", proposal: updatedProposal });
+    res.json({ message: "✅ Proposal updated successfully", proposal: updatedProposal });
   } catch (err) {
     console.error("❌ Error updating proposal:", err);
     res.status(500).json({ error: err.message });
   }
 });
 
+// 📌 Get All Proposals
+router.get("/proposals", async (req, res) => {
+  try {
+    const proposals = await Proposal.find()
+      .populate("services")
+      .populate("products")
+      .populate("employees");
 
-  
-  
-  // 📋 Get Proposals
-  router.get("/proposals", async (req, res) => {
-    try {
-      const proposals = await Proposal.find();
-      res.json(proposals);
-    } catch (err) {
-      res.status(500).json({ error: err.message });
+    res.json(proposals);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// 📌 Get Single Proposal
+router.get("/:id", async (req, res) => {
+  try {
+    const proposal = await Proposal.findById(req.params.id)
+      .populate("services")
+      .populate("products")
+      .populate("employees");
+
+    if (!proposal) {
+      return res.status(404).json({ error: "Proposal not found" });
     }
-  });
-  
-  // ❌ Delete Proposal
-  router.delete("/proposals/:id", async (req, res) => {
-    try {
-      await Proposal.findByIdAndDelete(req.params.id);
-      res.json({ message: "Proposal deleted successfully" });
-    } catch (err) {
-      res.status(500).json({ error: err.message });
-    }
-  });
+
+    res.json(proposal);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// ❌ Delete Proposal
+router.delete("/:id", async (req, res) => {
+  try {
+    await Proposal.findByIdAndDelete(req.params.id);
+    res.json({ message: "Proposal deleted successfully" });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 // 📄 Generate Proposal PDF
-router.get("/proposals/:id/pdf", async (req, res) => {
+router.get("/:id/pdf", async (req, res) => {
   try {
     const proposal = await Proposal.findById(req.params.id)
       .populate("services")
@@ -147,11 +184,10 @@ router.get("/proposals/:id/pdf", async (req, res) => {
 
     const html = generateSolarQuoteHTML(proposal);
 
-    // ✅ Launch Puppeteer with Chromium for Render
     const browser = await puppeteer.launch({
       args: chromium.args,
       defaultViewport: chromium.defaultViewport,
-      executablePath: await chromium.executablePath(), 
+      executablePath: await chromium.executablePath(),
       headless: chromium.headless,
     });
 
@@ -166,8 +202,7 @@ router.get("/proposals/:id/pdf", async (req, res) => {
 
     await browser.close();
 
-    const fileName =
-      proposal.clientName?.replace(/\s+/g, "_") || "proposal";
+    const fileName = proposal.clientName?.replace(/\s+/g, "_") || "proposal";
 
     res.set({
       "Content-Type": "application/pdf",
