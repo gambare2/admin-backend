@@ -152,6 +152,18 @@ router.post("/uploadGraph", upload.single("file"), async (req, res) => {
   }
 });
 
+router.get("/graph/:id", async (req, res) => {
+  try {
+    const graph = await GraphImage.findById(req.params.id);
+    if (!graph) return res.status(404).send("Not found");
+
+    res.set("Content-Type", graph.contentType);
+    res.send(graph.data);
+  } catch (err) {
+    res.status(500).send(err.message);
+  }
+});
+
 
 // 📌 Update Proposal
 router.put("/:id", async (req, res) => {

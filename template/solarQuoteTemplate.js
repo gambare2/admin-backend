@@ -5,7 +5,7 @@ module.exports = function generateSolarQuoteHTML(proposal) {
   const graphImage = proposal.plotgraph
     ? (proposal.plotgraph.startsWith("data:")
         ? proposal.plotgraph
-        : `${API_URL}/api/proposal/graph/${proposal.plotgraph}`) // if you store id
+        : `${API_URL}/api/proposal/graph/${proposal.plotgraph}`)
     : null;
 
   return `
@@ -42,79 +42,96 @@ module.exports = function generateSolarQuoteHTML(proposal) {
   <div class="flex justify-between items-start">
     <div>
       <img src="${API_URL}/assets/logo.png" alt="Logo" class="logo" />
-      <div class="mt-4 text-sm text-gray-500">www.sunmayo.com</div>
     </div>
-    <div class="text-right">
-      <h1 class="text-4xl font-bold">Solar Proposal</h1>
-      <div class="mt-4 text-sm">Prepared By</div>
-      <div class="font-semibold">SUNMAYO PRIVATE LIMITED</div>
-      <div class="text-xs text-gray-500">26/18 Laxmi Garden, Sector 11, Gurgaon, Haryana 122001</div>
-    </div>
-  </div>
-
-  <div class="mt-12 grid grid-cols-2 gap-6">
-    <div>
+    <div class="text-right flex justify-between">
+      <div>
+        <h1 class="text-4xl font-bold">Solar Proposal</h1>
+        <div class="mt-4 text-2xl">Prepared By</div>
+        <div class="font-semibold">SUNMAYO PRIVATE LIMITED</div>
+        <div class="text-xs text-gray-500">26/18 Laxmi Garden, Sector 11, Gurgaon, Haryana 122001</div>
+        <div class="text-xs text-gray-500">📞  +91 9643800850 </div>
+        <div class="text-xs text-gray-500">✉  info@sunmayo.com </div>
+        <div class="text-xs text-gray-500">🔗 www.sunmayo.com</div>
+      </div>
+      <div>
       <h2 class="text-xl font-semibold">Prepared for:</h2>
-      <div class="mt-3 text-sm">
+      <div class="mt-3 text-xl">
         <div class="font-medium">${proposal.clientName}</div>
         <div>${proposal.clientPhone}</div>
         <div>${proposal.clientEmail}</div>
         <div>${proposal.clientAddress}</div>
       </div>
     </div>
-    <div class="flex items-center justify-center bg-gray-100 rounded">
-      <img src="${API_URL}/assets/solar_background.jpg" alt="Hero" />
     </div>
   </div>
+    <div class="flex items-center justify-center bg-gray-100 rounded">
+      <img src="${API_URL}/assets/solar_background.jpg" class= "w-full h-full" alt="Hero" />
+    </div>
   <div class="page-footer">Page 1 • Cover</div>
 </section>
 
 <!-- PAGE 2: WELCOME -->
 <section class="page">
   <h2 class="text-3xl font-bold">Welcome</h2>
-  <div class="mt-4 text-sm">Dear <span class="font-semibold">${proposal.clientName}</span>,</div>
-  <p class="mt-4 leading-6 text-sm">
-    It has been a privilege to understand your requirement and give you the best solution for you.
-    We select the best components and industry-leading performance models to ensure your system will
-    produce optimally. Our highly trained installation crews take pride in delivering beautiful,
-    well-made solar arrays.
-  </p>
-  <ul class="list-disc ml-6 mt-4 text-sm">
-    <li>High-efficiency panels with long term performance warranty.</li>
-    <li>Robust hot-dip galvanised elevated structure.</li>
-    <li>Turnkey installation with quality-tested BOS components.</li>
-  </ul>
-  <div class="mt-8 text-sm">
-    Thanks & Regards,<br/>
-    SunMayo Private Limited<br/>
-    +91 9643800850
-  </div>
+  <h2 class= "text-3xl font-semibold">Mr. ${proposal.clientName}</h2>
+  <div class="mt-4 text-2xl">Dear <span class="font-semibold">${proposal.clientName}</span>,</div>
+    <p class="mt-4 leading-6 text-xl">
+       It has been a privilege to understand your requirement and give you the best solution for you. As required, we have committed to the highest levelof quality. That’s why we select the best components and industry-leading performance models to ensure your system will produce optimally. Our highly trained installation crews take pride in delivering beautiful well-made solar arrays. From the panels to the bolts on the roof, we’ll deliberately consider every piece of your installation so you can rest easy throughout its many years of service. We take great pride in our guarantee of complete customer satisfaction.
+       We are looking forward to help you and have a long-term relationship with
+       you. Please go through the proposal and give us your feedback.
+    </p>
+    <ul class="list-disc ml-6 mt-4 text-lg">
+      <li>High-efficiency panels with long term performance warranty.</li>
+      <li>Robust hot-dip galvanised elevated structure.</li>
+      <li>Turnkey installation with quality-tested BOS components.</li>
+    </ul>
+   <div class="mt-8 text-xl">
+      <div class= " font-bold">
+          Thanks & Regards,
+      </div>
+          SunMayo Private Limited<br/>
+          +91 9643800850
+    </div>
   <div class="page-footer">Page 2 • Welcome</div>
 </section>
 
 <!-- PAGE 3: SPECIFICATION & SAVINGS -->
 <section class="page">
-  <h2 class="text-2xl font-bold">Specifications & Savings</h2>
-  <div class="mt-4 grid grid-cols-3 gap-4 text-sm">
+  <h2 class="text-2xl font-bold"><span class= "text-blue-800">Specifications</span> & Savings</h2>
+  <div class="mt-4 grid grid-cols-3 gap-4 text-xl">
     <div>
       <p class="font-semibold">Plant Capacity</p>
       <p>${proposal.projectsize} kW</p>
+      <div class="bg-blue-700 w-10 h-2"></div>
     </div>
     <div>
       <p class="font-semibold">Structure Type</p>
       <p>${proposal.proposalStructure}</p>
+      <div class="bg-blue-700 w-10 h-2"></div>
     </div>
     <div>
       <p class="font-semibold">Inverter</p>
       <p>${proposal.invertortype || proposal.InvertorSize}</p>
+      <div class="bg-blue-700 w-10 h-2"></div>
     </div>
   </div>
-  <div class="mt-4 text-sm">
-    Yearly consumption: <span class="font-semibold">${proposal.yearlyconsumption} kWh</span><br/>
-    Estimated yearly solar generation: <span class="font-semibold">${proposal.yearlysolargeneration} kWh</span>
+  <div class="bg-blue-700 w-11/12 ml-4 h-1"></div>
+  <div class="mt-4 text-xl font-semibold">
+    <div class= "flex-col flex">
+      <img src="${API_URL}/assets/solar-power-plant.svg" alt="" class="logo" />
+      <div>
+        <span> Yearly consumption:</span><br/> <span class="font-bold">${proposal.yearlyconsumption} kWh</span><br/>
+      </div>
+    <div>
+    <div class= "flex-col flex">
+      <img src="${API_URL}/assets/solar-generation.svg" alt="" class="logo" />
+      <div>
+        <span>Estimated yearly solar generation: </span><br/><span class="font-bold">${proposal.yearlysolargeneration} kWh</span>
+      </div>
+    <div>
   </div>
   <div class="mt-8">
-    ${graphImage ? `<img src="${graphImage}" alt="Graph" class="border rounded"/>` : ""}
+    ${graphImage ? `<img src="${graphImage}" alt="Graph" class="border rounded w-full h-full"/>` : ""}
   </div>
   <div class="page-footer">Page 3 • Specs & Savings</div>
 </section>
@@ -122,29 +139,56 @@ module.exports = function generateSolarQuoteHTML(proposal) {
 <!-- PAGE 4: COMMERCIAL OFFER -->
 <section class="page">
   <h2 class="text-2xl font-bold">Commercial Offer & Payment</h2>
-  <div class="mt-4 text-sm">
-    30% advance along with Purchase Order • 65% before dispatch • 5% after installation
+  ${graphImage ? `<img src="${graphImage}" alt="Graph" class="border rounded w-full h-full"/>` : ""}
+  <div class="mt-4 text-xl">
+    <div class = "font-bold">Payment Schedule </div>
+    <ul>
+      <li> As a percentage of the Net Value of System.</li>
+      <li>  30% advance along with PurchaseOrder.</li>
+      <li> 65% Before the Dispatch of material Balance 05% after installation and commissioning.</li>
+    </ul>
   </div>
-  <div class="mt-4 text-sm">
-    <span class="font-semibold">Bank:</span> IDFC FIRST BANK<br/>
-    <span class="font-semibold">A/C:</span> SUNMAYO PRIVATE LIMITED — 10223162147<br/>
-    <span class="font-semibold">IFSC:</span> IDFB0021005
+  <div class="mt-4 text-xl">
+    <div class = "font-bold">Payment Details: </div>
+    <p> Payment can be paid in Cheque/ scanner code/ Netbanking</p>
+      <span class="font-semibold">Bank:</span> IDFC FIRST BANK<br/>
+      <span class="font-semibold">A/C:</span> SUNMAYO PRIVATE LIMITED — 10223162147<br/>
+      <span class="font-semibold">IFSC:</span> IDFB0021005
   </div>
-  <div class="mt-6 text-sm">
-    Terms: Prices are firm for 10 days from offer date. Delivery 2–3 weeks. Force majeure applies.
-  </div>
-  <div class="page-footer">Page 4 • Commercial</div>
+    <div class="mt-6 text-base">
+      Terms: Prices are firm for 10 days from offer date. Delivery 2–3 weeks. Force majeure applies.
+    </div>
+    <div class="page-footer">Page 4 • Commercial</div>
 </section>
 
 <!-- PAGE 5: BILL OF MATERIALS -->
 <section class="page">
   <h2 class="text-2xl font-bold">Bill of Materials</h2>
-  <div class="mt-4 text-sm">
-    Panel: ${proposal.Wattpeak} Wp × ${proposal.quantity} Nos<br/>
-    Inverter: ${proposal.InvertorSize} kW × ${proposal.invertorquantitiy} Nos<br/>
-    Warranty: Panel ${proposal.warranty} yrs • Performance ${proposal.performancewarranty} yrs<br/>
+  <div class="mt-4 text-xl">
+    Watt Peak: ${proposal.Wattpeak} Wp<br/>
+    Panel Qty: ${proposal.quantity} Nos<br/>
+    Panel type: ${proposal.paneltype} <br/>
   </div>
-  <div class="mt-4 text-sm">
+  <div class="bg-blue-700 w-11/12 ml-4 h-2"></div>
+  <div class="mt-4 text-xl">
+    Inverter: ${proposal.InvertorSize} kW<br/>
+    Phase:  ${proposal.invertorPhase}<br/>
+    Phase QTY:  ${proposal.invertorquantitiy} yrs<br/>
+  </div>
+  <div class="bg-blue-700 w-10 h-2"></div>
+  <div class = "flex flex-row justify-between text-xl">
+    <div>
+      <span class = "text-blue-700 text-2xl"> Cable</span><br/>
+        Cable brand: ${proposal.cableBrands}
+    </div>
+    <div>
+      <span class = "text-blue-700 text-2xl">Warranty</span><br/>
+      Panel: ${proposal.warranty} Year(s)<br/>
+      Panel Performance : ${proposal.performancewarranty} Years(s)<br/>
+      Invertor : ${proposal.Invertorwarranty}Year(s)<br/>
+    </div>
+  </div>
+  <div class="mt-4 text-xl">
     Balance of System:<br/>${proposal.balanceOfSystem}
   </div>
   <div class="page-footer">Page 5 • Bill of Materials</div>
@@ -152,23 +196,33 @@ module.exports = function generateSolarQuoteHTML(proposal) {
 
 <!-- PAGE 6: SCOPE & ACCEPTANCE -->
 <section class="page">
-  <h2 class="text-2xl font-bold">Scope & Acceptance</h2>
-  <h3 class="mt-4 font-semibold">Our Scope</h3>
-  <p class="text-sm mt-1">${proposal.ourScope}</p>
-  <h3 class="mt-4 font-semibold">Customer Scope</h3>
-  <p class="text-sm mt-1">${proposal.customerScope}</p>
-  <h3 class="mt-4 font-semibold">Site Address</h3>
-  <p class="text-sm mt-1">${proposal.clientAddress}</p>
-  <div class="mt-8 grid grid-cols-2 gap-6">
-    <div>
-      <div class="h-24 border flex items-center justify-center">Customer Signature</div>
-      <div class="mt-1 text-xs">Name: ${proposal.clientName}</div>
-    </div>
-    <div>
-      <div class="h-24 border flex items-center justify-center">Company Authorised Signatory</div>
-      <div class="mt-1 text-xs">SUNMAYO PRIVATE LIMITED</div>
-    </div>
+  <div class= "text-xl">
+    <span class = "font-bold"> Term & Condition</span><br/>
+    <ol>
+      <li>Packing is included in the offer. </li>
+      <li>Transportation charges our scope. </li>
+      <li>Civil and digging are at our scope. </li>
+      <li>Prices quotes are firm and valid for 10 days from the date of offer. After this period a reconfirmation from our office should be taken. </li>
+      <li>Water supply at site will be provided by customer free of cost during the time of installation and commissioning. </li>
+      <li>Closed, covered, locked stores will be provided by customer during the time of installation and commissioning. </li>
+      <li>We will start the approval process as soon as we receive order conformation. From the time of confirmation till 10 days before installation day 1, there will be a nominal cancellation charge of INR 25,000 or 5% of system cost, whichever is higher. </li>
+      <li>Delivery: 2-3 weeks from the date of technically and commercially cleared order. </li>
+      <li>Force Major clause: this quotation as well as the resulting contract are subject to the standard force majeure condition </li>
+      <li>Include lesining charges </li>
+    </0l>
   </div>
+  <div class="mt-8 grid grid-cols-2 gap-6">
+   <img src="${API_URL}/assets/Panel_logo.png" alt="Logo" class="size-32" />
+  </div>
+  <div class="mt-8 text-xl">
+      <div class= " font-bold">
+          Thanks & Regards,
+       <div class="font-semibold">SUNMAYO PRIVATE LIMITED</div>
+        <div class="text-xs text-gray-500">26/18 Laxmi Garden, Sector 11, Gurgaon, Haryana 122001</div>
+        <div class="text-xs text-gray-500">📞  +91 9643800850 </div>
+        <div class="text-xs text-gray-500">✉  info@sunmayo.com </div>
+        <div class="text-xs text-gray-500">🔗 www.sunmayo.com</div>
+  
   <div class="mt-4 text-xs">Date: ____________________</div>
   <div class="page-footer">Page 6 • Scope & Acceptance</div>
 </section>
