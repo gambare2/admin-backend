@@ -22,7 +22,9 @@ const proposalSchema = new mongoose.Schema(
     invertorquantitiy: { type: String },
     invertortype: { type: String },      
     invertorPhase: { type: String },      
-    cableBrands: { type: String },        
+    ableBrands: {
+      type: [String], 
+      default: [] },
     proposalStructure: { type: String },
     structureDes: { type: String },
     systemwarranty: { type: String },
