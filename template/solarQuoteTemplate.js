@@ -48,30 +48,29 @@ module.exports = function generateSolarQuoteHTML(proposal) {
   <div class="flex justify-between items-start">
     <div>
       <img src="${API_URL}/assets/logo.png" alt="Logo" class="logo" />
-    </div>
-    <h1 class="text-4xl font-bold my-3">Solar Proposal</h1>
-    <div class="text-left flex justify-between">
+    </div><br/>
+    <h1 class="text-4xl font-bold my-3">Solar Proposal</h1><br/>
+    <div class="text-left flex justify-between flex-row">
       <div>
-        <h1 class="text-4xl font-bold">Solar Proposal</h1>
-        <div class="mt-4 text-2xl">Prepared By</div>
-        <div class="font-semibold">SUNMAYO PRIVATE LIMITED</div>
-        <div class="text-lg">26/18 Laxmi Garden, Sector 11, Gurgaon, Haryana 122001</div>
-        <div class="text-lg"><img src="${API_URL}/assets/phone-call.png" alt="Logo" class="size-2" />  +91 9643800850 </div>
-        <div class="text-lg"><img src="${API_URL}/assets/communication.png" alt="Logo" class="size-2" />  info@sunmayo.com </div>
-        <div class="text-lg"><img src="${API_URL}/assets/worldwide.png" alt="Logo" class="size-2" /> www.sunmayo.com</div>
+          <div class="mt-4 text-2xl">Prepared By</div>
+          <div class="font-semibold">SUNMAYO PRIVATE LIMITED</div>
+          <div class="text-lg">26/18 Laxmi Garden, Sector 11, Gurgaon, Haryana 122001</div>
+          <div class="text-lg flex flex-row"><img src="${API_URL}/assets/phone-call.png" alt="Logo" class="size-2" />  <span>+91 9643800850</span> </div>
+          <div class="text-lg flex flex-row"><img src="${API_URL}/assets/communication.png" alt="Logo" class="size-2" /><span>  info@sunmayo.com</span> </div>
+          <div class="text-lg flex flex-row"><img src="${API_URL}/assets/worldwide.png" alt="Logo" class="size-2" /> <span>www.sunmayo.com</span></div>
       </div>
       <div>
-      <h2 class="text-xl font-semibold">Prepared for:</h2>
-      <div class="mt-3 text-xl">
-        <div class="font-medium">${proposal.clientName}</div>
-        <div>${proposal.clientPhone}</div>
-        <div>${proposal.clientEmail}</div>
-        <div>${proposal.clientAddress}</div>
+        <h2 class="text-xl font-semibold">Prepared for:</h2>
+        <div class="mt-3 text-xl">
+          <div class="font-medium">${proposal.clientName}</div>
+          <div>${proposal.clientPhone}</div>
+          <div>${proposal.clientEmail}</div>
+          <div>${proposal.clientAddress}</div>
+        </div>
       </div>
-    </div>
     </div>
   </div>
-    <div class="flex items-center justify-center bg-gray-100 rounded">
+    <div class="flex flex-col items-center justify-center bg-gray-100 rounded">
      <img src="${API_URL}/assets/generate_logo.jpg" class= "w-full h-full" alt="Hero" />
       <img src="${API_URL}/assets/Solar_Proposal.jpg" class= "w-full h-full" alt="Hero" />
     </div>
@@ -225,12 +224,12 @@ module.exports = function generateSolarQuoteHTML(proposal) {
   </div>
   <div class="mt-8 text-xl">
       <div class= " font-bold">
-          Thanks & Regards,
-       <div class="font-semibold">SUNMAYO PRIVATE LIMITED</div>
-        <div class="text-lg">26/18 Laxmi Garden, Sector 11, Gurgaon, Haryana 122001</div>
-        <div class="text-lg"><img src="${API_URL}/assets/phone-call.png" alt="Logo" class="size-2" />  +91 9643800850 </div>
-        <div class="text-lg"><img src="${API_URL}/assets/communication.png" alt="Logo" class="size-2" />  info@sunmayo.com </div>
-        <div class="text-lg"><img src="${API_URL}/assets/worldwide.png" alt="Logo" class="size-2" /> www.sunmayo.com</div>
+          Thanks & Regards, </div>
+            <div class="font-semibold">SUNMAYO PRIVATE LIMITED</div>
+            <div class="text-lg">26/18 Laxmi Garden, Sector 11, Gurgaon, Haryana 122001</div>
+            <div class="text-lg flex flex-row"><img src="${API_URL}/assets/phone-call.png" alt="Logo" class="size-2" />  <span>+91 9643800850</span> </div>
+            <div class="text-lg flex flex-row"><img src="${API_URL}/assets/communication.png" alt="Logo" class="size-2" /><span>  info@sunmayo.com</span> </div>
+            <div class="text-lg flex flex-row"><img src="${API_URL}/assets/worldwide.png" alt="Logo" class="size-2" /> <span>www.sunmayo.com</span></div>
   
   <div class="mt-4 text-xs">Date: ____________________</div>
   <div class="page-footer">Page 6 • Scope & Acceptance</div>
