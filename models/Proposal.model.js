@@ -20,6 +20,9 @@ const proposalSchema = new mongoose.Schema(
     InvertorSize: { type: String },
     quantity: { type: String },
     invertorquantitiy: { type: String },
+    invertortype: { type: String },      
+    invertorPhase: { type: String },      
+    cableBrands: { type: String },        
     proposalStructure: { type: String },
     structureDes: { type: String },
     systemwarranty: { type: String },
@@ -40,6 +43,10 @@ const proposalSchema = new mongoose.Schema(
     balanceOfSystem: { type: String },
     ourScope: { type: String },
     customerScope: { type: String },
+
+    // images
+    tableImage: { type: String },         
+    graphimage: { type: String },         
 
     // relations
     services: [{ type: mongoose.Schema.Types.ObjectId, ref: "Service" }],

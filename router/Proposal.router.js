@@ -35,6 +35,9 @@ router.post("/add-proposal", async (req, res) => {
       InvertorSize,
       quantity,
       invertorquantitiy,
+      invertortype,
+      invertorPhase,
+      cableBrands,
       proposalStructure,
       structureDes,
       systemwarranty,
@@ -48,13 +51,15 @@ router.post("/add-proposal", async (req, res) => {
       plotgraph,
       directionType,
       priceincrement,
-      graphType,
+      graphType, 
       services,
       products,
       employees,
       balanceOfSystem,
       ourScope,
       customerScope,
+      tableImage,
+      graphimage,
     } = req.body;
 
     // Validation (only required fields)
@@ -82,6 +87,9 @@ router.post("/add-proposal", async (req, res) => {
       InvertorSize,
       quantity,
       invertorquantitiy,
+      invertortype,
+      invertorPhase,
+      cableBrands,
       proposalStructure,
       structureDes,
       systemwarranty,
@@ -95,13 +103,15 @@ router.post("/add-proposal", async (req, res) => {
       plotgraph,
       directionType,
       priceincrement,
-      graphType,
+      graphType, 
       services: Array.isArray(services) ? services : [],
       products: Array.isArray(products) ? products : [],
       employees: Array.isArray(employees) ? employees : [],
       balanceOfSystem,
       ourScope,
       customerScope,
+      tableImage,
+      graphimage,
     });
 
     await proposal.save();
@@ -113,6 +123,7 @@ router.post("/add-proposal", async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 });
+
 
 // 📌 Upload Graph Image
 router.post("/uploadGraph", upload.single("file"), async (req, res) => {
