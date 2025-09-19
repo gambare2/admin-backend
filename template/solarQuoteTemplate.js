@@ -2,10 +2,16 @@
 const API_URL = process.env.VITE_API_URL || "http://localhost:5000";
 
 module.exports = function generateSolarQuoteHTML(proposal) {
-  const graphImage = proposal.plotgraph
-    ? (proposal.plotgraph.startsWith("data:")
-        ? proposal.plotgraph
-        : `${API_URL}/api/proposal/graph/${proposal.plotgraph}`)
+  const tableImage = proposal.tableImage
+    ? (proposal.tableImage.startsWith('data:')
+        ? proposal.tableImage
+        : `${API_URL}/api/proposal/table/${proposal.tableImage}`)
+    : null;
+
+  const graphImage = proposal.graphimage
+    ? (proposal.graphimage.startsWith('data:')
+        ? proposal.graphimage
+        : `${API_URL}/api/proposal/graph/${proposal.graphimage}`)
     : null;
 
   return `
@@ -43,15 +49,16 @@ module.exports = function generateSolarQuoteHTML(proposal) {
     <div>
       <img src="${API_URL}/assets/logo.png" alt="Logo" class="logo" />
     </div>
-    <div class="text-right flex justify-between">
+    <h1 class="text-4xl font-bold my-3">Solar Proposal</h1>
+    <div class="text-left flex justify-between">
       <div>
         <h1 class="text-4xl font-bold">Solar Proposal</h1>
         <div class="mt-4 text-2xl">Prepared By</div>
         <div class="font-semibold">SUNMAYO PRIVATE LIMITED</div>
-        <div class="text-xs text-gray-500">26/18 Laxmi Garden, Sector 11, Gurgaon, Haryana 122001</div>
-        <div class="text-xs text-gray-500">📞  +91 9643800850 </div>
-        <div class="text-xs text-gray-500">✉  info@sunmayo.com </div>
-        <div class="text-xs text-gray-500">🔗 www.sunmayo.com</div>
+        <div class="text-lg">26/18 Laxmi Garden, Sector 11, Gurgaon, Haryana 122001</div>
+        <div class="text-lg"><img src="${API_URL}/assets/phone-call.png" alt="Logo" class="size-2" />  +91 9643800850 </div>
+        <div class="text-lg"><img src="${API_URL}/assets/communication.png" alt="Logo" class="size-2" />  info@sunmayo.com </div>
+        <div class="text-lg"><img src="${API_URL}/assets/worldwide.png" alt="Logo" class="size-2" /> www.sunmayo.com</div>
       </div>
       <div>
       <h2 class="text-xl font-semibold">Prepared for:</h2>
@@ -65,22 +72,23 @@ module.exports = function generateSolarQuoteHTML(proposal) {
     </div>
   </div>
     <div class="flex items-center justify-center bg-gray-100 rounded">
-      <img src="${API_URL}/assets/solar_background.jpg" class= "w-full h-full" alt="Hero" />
+     <img src="${API_URL}/assets/generate_logo.jpg" class= "w-full h-full" alt="Hero" />
+      <img src="${API_URL}/assets/Solar_Proposal.jpg" class= "w-full h-full" alt="Hero" />
     </div>
   <div class="page-footer">Page 1 • Cover</div>
 </section>
 
 <!-- PAGE 2: WELCOME -->
 <section class="page">
-  <h2 class="text-3xl font-bold">Welcome</h2>
-  <h2 class= "text-3xl font-semibold">Mr. ${proposal.clientName}</h2>
+  <h2 class="text-3xl font-bold "><span class="text-blue-800">Wel</span>come</h2>
+  <h2 class= "text-3xl font-semibold mt-3">Mr. ${proposal.clientName}</h2>
   <div class="mt-4 text-2xl">Dear <span class="font-semibold">${proposal.clientName}</span>,</div>
     <p class="mt-4 leading-6 text-xl">
        It has been a privilege to understand your requirement and give you the best solution for you. As required, we have committed to the highest levelof quality. That’s why we select the best components and industry-leading performance models to ensure your system will produce optimally. Our highly trained installation crews take pride in delivering beautiful well-made solar arrays. From the panels to the bolts on the roof, we’ll deliberately consider every piece of your installation so you can rest easy throughout its many years of service. We take great pride in our guarantee of complete customer satisfaction.
        We are looking forward to help you and have a long-term relationship with
        you. Please go through the proposal and give us your feedback.
     </p>
-    <ul class="list-disc ml-6 mt-4 text-lg">
+    <ul class="list-disc ml-6 mt-4 text-xl">
       <li>High-efficiency panels with long term performance warranty.</li>
       <li>Robust hot-dip galvanised elevated structure.</li>
       <li>Turnkey installation with quality-tested BOS components.</li>
@@ -88,10 +96,11 @@ module.exports = function generateSolarQuoteHTML(proposal) {
    <div class="mt-8 text-xl">
       <div class= " font-bold">
           Thanks & Regards,
-      </div>
-          SunMayo Private Limited<br/>
-          +91 9643800850
-    </div>
+       <div class="font-semibold">SUNMAYO PRIVATE LIMITED</div>
+        <div class="text-lg">26/18 Laxmi Garden, Sector 11, Gurgaon, Haryana 122001</div>
+        <div class="text-lg"><img src="${API_URL}/assets/phone-call.png" alt="Logo" class="size-2" />  +91 9643800850 </div>
+        <div class="text-lg"><img src="${API_URL}/assets/communication.png" alt="Logo" class="size-2" />  info@sunmayo.com </div>
+        <div class="text-lg"><img src="${API_URL}/assets/worldwide.png" alt="Logo" class="size-2" /> www.sunmayo.com</div>
   <div class="page-footer">Page 2 • Welcome</div>
 </section>
 
@@ -102,21 +111,21 @@ module.exports = function generateSolarQuoteHTML(proposal) {
     <div>
       <p class="font-semibold">Plant Capacity</p>
       <p>${proposal.projectsize} kW</p>
-      <div class="bg-blue-700 w-10 h-2"></div>
+      <div class="bg-blue-700 w-50 h-2"></div>
     </div>
     <div>
       <p class="font-semibold">Structure Type</p>
       <p>${proposal.proposalStructure}</p>
-      <div class="bg-blue-700 w-10 h-2"></div>
+      <div class="bg-blue-700 w-50 h-2"></div>
     </div>
     <div>
       <p class="font-semibold">Inverter</p>
       <p>${proposal.invertortype || proposal.InvertorSize}</p>
-      <div class="bg-blue-700 w-10 h-2"></div>
+      <div class="bg-blue-700 w-50 h-2"></div>
     </div>
   </div>
-  <div class="bg-blue-700 w-11/12 ml-4 h-1"></div>
-  <div class="mt-4 text-xl font-semibold">
+  <div class="bg-blue-700 w-11/12 my-2 h-1"></div>
+  <div class="mt-4 text-xl flex flex-row justify-between font-semibold">
     <div class= "flex-col flex">
       <img src="${API_URL}/assets/solar-power-plant.svg" alt="" class="logo" />
       <div>
@@ -131,7 +140,7 @@ module.exports = function generateSolarQuoteHTML(proposal) {
     <div>
   </div>
   <div class="mt-8">
-    ${graphImage ? `<img src="${graphImage}" alt="Graph" class="border rounded w-full h-full"/>` : ""}
+          ${graphImage ? `<div><h3 class="font-semibold mb-2">Graph</h3><img src="${graphImage}" alt="Graph Image"/></div>` : ''}
   </div>
   <div class="page-footer">Page 3 • Specs & Savings</div>
 </section>
@@ -139,7 +148,7 @@ module.exports = function generateSolarQuoteHTML(proposal) {
 <!-- PAGE 4: COMMERCIAL OFFER -->
 <section class="page">
   <h2 class="text-2xl font-bold">Commercial Offer & Payment</h2>
-  ${graphImage ? `<img src="${graphImage}" alt="Graph" class="border rounded w-full h-full"/>` : ""}
+    ${tableImage ? `<div><h3 class="font-semibold mb-2">Table</h3><img src="${tableImage}" alt="Table Image"/></div>` : ''}
   <div class="mt-4 text-xl">
     <div class = "font-bold">Payment Schedule </div>
     <ul>
@@ -218,10 +227,10 @@ module.exports = function generateSolarQuoteHTML(proposal) {
       <div class= " font-bold">
           Thanks & Regards,
        <div class="font-semibold">SUNMAYO PRIVATE LIMITED</div>
-        <div class="text-xs text-gray-500">26/18 Laxmi Garden, Sector 11, Gurgaon, Haryana 122001</div>
-        <div class="text-xs text-gray-500">📞  +91 9643800850 </div>
-        <div class="text-xs text-gray-500">✉  info@sunmayo.com </div>
-        <div class="text-xs text-gray-500">🔗 www.sunmayo.com</div>
+        <div class="text-lg">26/18 Laxmi Garden, Sector 11, Gurgaon, Haryana 122001</div>
+        <div class="text-lg"><img src="${API_URL}/assets/phone-call.png" alt="Logo" class="size-2" />  +91 9643800850 </div>
+        <div class="text-lg"><img src="${API_URL}/assets/communication.png" alt="Logo" class="size-2" />  info@sunmayo.com </div>
+        <div class="text-lg"><img src="${API_URL}/assets/worldwide.png" alt="Logo" class="size-2" /> www.sunmayo.com</div>
   
   <div class="mt-4 text-xs">Date: ____________________</div>
   <div class="page-footer">Page 6 • Scope & Acceptance</div>
