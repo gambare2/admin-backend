@@ -44,38 +44,59 @@ module.exports = function generateSolarQuoteHTML(proposal) {
 <body class="bg-white text-gray-900">
 
 <!-- PAGE 1: COVER -->
-<section class="page">
-  <div class="flex justify-between items-start">
-    <div>
-      <img src="${API_URL}/assets/logo.png" alt="Logo" class="logo" />
-    </div><br/>
-    <h1 class="text-4xl font-bold my-3">Solar Proposal</h1><br/>
-    <div class="text-left flex justify-between flex-row">
-      <div>
-          <div class="mt-4 text-2xl">Prepared By</div>
-          <div class="font-semibold">SUNMAYO PRIVATE LIMITED</div>
-          <div class="text-lg">26/18 Laxmi Garden, Sector 11, Gurgaon, Haryana 122001</div>
-          <div class="text-lg flex flex-row"><img src="${API_URL}/assets/phone-call.png" alt="Logo" class="size-2" />  <span>+91 9643800850</span> </div>
-          <div class="text-lg flex flex-row"><img src="${API_URL}/assets/communication.png" alt="Logo" class="size-2" /><span>  info@sunmayo.com</span> </div>
-          <div class="text-lg flex flex-row"><img src="${API_URL}/assets/worldwide.png" alt="Logo" class="size-2" /> <span>www.sunmayo.com</span></div>
+<section class="page w-full min-h-screen bg-white p-8 font-sans">
+  <!-- Top header -->
+  <div class="flex flex-col md:flex-row md:justify-between md:items-start">
+    <!-- Logo -->
+    <div class="flex items-center gap-4">
+      <img src="${API_URL}/assets/logo.png" alt="Logo" class="w-24 h-auto" />
+      <h1 class="text-4xl font-bold text-gray-800">Solar Proposal</h1>
+    </div>
+  </div>
+
+  <!-- Prepared by / Prepared for -->
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mt-10">
+    <div class="space-y-2">
+      <div class="text-2xl font-semibold text-gray-700">Prepared By</div>
+      <div class="font-bold text-gray-900">SUNMAYO PRIVATE LIMITED</div>
+      <div class="text-gray-600">26/18 Laxmi Garden, Sector 11, Gurgaon, Haryana 122001</div>
+      <div class="flex items-center gap-2 text-gray-600">
+        <img src="${API_URL}/assets/phone-call.png" alt="Phone" class="w-4 h-4" />
+        <span>+91 9643800850</span>
       </div>
-      <div>
-        <h2 class="text-xl font-semibold">Prepared for:</h2>
-        <div class="mt-3 text-xl">
-          <div class="font-medium">${proposal.clientName}</div>
-          <div>${proposal.clientPhone}</div>
-          <div>${proposal.clientEmail}</div>
-          <div>${proposal.clientAddress}</div>
-        </div>
+      <div class="flex items-center gap-2 text-gray-600">
+        <img src="${API_URL}/assets/communication.png" alt="Email" class="w-4 h-4" />
+        <span>info@sunmayo.com</span>
+      </div>
+      <div class="flex items-center gap-2 text-gray-600">
+        <img src="${API_URL}/assets/worldwide.png" alt="Website" class="w-4 h-4" />
+        <span>www.sunmayo.com</span>
+      </div>
+    </div>
+
+    <div class="space-y-2">
+      <h2 class="text-xl font-semibold text-gray-700">Prepared For:</h2>
+      <div class="mt-3 text-gray-700 text-lg">
+        <div class="font-medium">${proposal.clientName}</div>
+        <div>${proposal.clientPhone}</div>
+        <div>${proposal.clientEmail}</div>
+        <div>${proposal.clientAddress}</div>
       </div>
     </div>
   </div>
-    <div class="flex flex-col items-center justify-center bg-gray-100 rounded">
-     <img src="${API_URL}/assets/generate_logo.jpg" class= "w-full h-full" alt="Hero" />
-      <img src="${API_URL}/assets/Solar_Proposal.jpg" class= "w-full h-full" alt="Hero" />
-    </div>
-  <div class="page-footer">Page 1 • Cover</div>
+
+  <!-- Hero images -->
+  <div class="mt-10 rounded-xl overflow-hidden shadow-lg bg-gray-50">
+    <img src="${API_URL}/assets/generate_logo.jpg" class="w-full h-72 object-cover" alt="Hero" />
+    <img src="${API_URL}/assets/Solar_Proposal.jpg" class="w-full h-72 object-cover" alt="Hero" />
+  </div>
+
+  <!-- Footer -->
+  <div class="mt-8 text-sm text-gray-500 text-center border-t pt-4">
+    Page 1 • Cover
+  </div>
 </section>
+
 
 <!-- PAGE 2: WELCOME -->
 <section class="page">
@@ -110,20 +131,19 @@ module.exports = function generateSolarQuoteHTML(proposal) {
     <div>
       <p class="font-semibold">Plant Capacity</p>
       <p>${proposal.projectsize} kW</p>
-      <div class="bg-blue-700 w-50 h-2"></div>
+      <div class="bg-blue-700 w-44 h-1"></div>
     </div>
     <div>
       <p class="font-semibold">Structure Type</p>
       <p>${proposal.proposalStructure}</p>
-      <div class="bg-blue-700 w-50 h-2"></div>
+      <div class="bg-blue-700 w-44 h-1"></div>
     </div>
     <div>
       <p class="font-semibold">Inverter</p>
       <p>${proposal.invertortype || proposal.InvertorSize}</p>
-      <div class="bg-blue-700 w-50 h-2"></div>
+      <div class="bg-blue-700 w-44 h-1"></div>
     </div>
   </div>
-  <div class="bg-blue-700 w-11/12 my-2 h-1"></div>
   <div class="mt-4 text-xl flex flex-row justify-between font-semibold">
     <div class= "flex-col flex">
       <img src="${API_URL}/assets/solar-power-plant.svg" alt="" class="logo" />
@@ -177,23 +197,27 @@ module.exports = function generateSolarQuoteHTML(proposal) {
     Panel Qty: ${proposal.quantity} Nos<br/>
     Panel type: ${proposal.paneltype} <br/>
   </div>
-  <div class="bg-blue-700 w-11/12 ml-4 h-2"></div>
+  <div class="bg-blue-700 w-11/12 h-1"></div>
   <div class="mt-4 text-xl">
     Inverter: ${proposal.InvertorSize} kW<br/>
     Phase:  ${proposal.invertorPhase}<br/>
     Phase QTY:  ${proposal.invertorquantitiy} yrs<br/>
   </div>
-  <div class="bg-blue-700 w-10 h-2"></div>
+  <div class="bg-blue-700 w-11/12 h-1"></div>
   <div class = "flex flex-row justify-between text-xl">
-    <div>
-      <span class = "text-blue-700 text-2xl"> Cable</span><br/>
+    <div class="flex flex-row">
+      <div>
+        <span class = "text-blue-700 text-2xl"> Cable</span><br/>
         Cable brand: ${proposal.cableBrands}
+      </div>
+      <div class="bg-blue-700 w-1 h-44"></div>
     </div>
     <div>
       <span class = "text-blue-700 text-2xl">Warranty</span><br/>
       Panel: ${proposal.warranty} Year(s)<br/>
       Panel Performance : ${proposal.performancewarranty} Years(s)<br/>
       Invertor : ${proposal.Invertorwarranty}Year(s)<br/>
+      Balance of System: ${proposal.systemwarranty} Year(s)<br/>
     </div>
   </div>
   <div class="mt-4 text-xl">
@@ -220,7 +244,7 @@ module.exports = function generateSolarQuoteHTML(proposal) {
     </0l>
   </div>
   <div class="mt-8 grid grid-cols-2 gap-6">
-   <img src="${API_URL}/assets/Panel_logo.png" alt="Logo" class="size-32" />
+   <img src="${API_URL}/assets/generate_logo.jpg" alt="Logo" class="w-full h-32" />
   </div>
   <div class="mt-8 text-xl">
       <div class= " font-bold">
