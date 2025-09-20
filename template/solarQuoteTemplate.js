@@ -8,19 +8,11 @@ module.exports = function generateSolarQuoteHTML(proposal) {
         : `${API_URL}/api/proposal/table/${proposal.tableImage}`)
     : null;
 
-    const graphImageUrl = proposal.graphimage
-    ? proposal.graphimage.startsWith("data:") || proposal.graphimage.startsWith("http")
-      ? proposal.graphimage
-      : `${API_URL}/api/proposal/graph/${proposal.graphimage}`
+  const graphImage = proposal.graphimage
+    ? (proposal.graphimage.startsWith('data:')
+        ? proposal.graphimage
+        : `${API_URL}/api/proposal/graph/${proposal.graphimage}`)
     : null;
-
-  // HTML for the graph section
-  const graphHtml = graphImageUrl
-    ? `<div style="margin-top: 20px;">
-         <h3 style="font-size: 18px; font-weight: 600; color: #374151; margin-bottom: 10px;">Savings Graph</h3>
-         <img src="${graphImageUrl}" alt="Graph Image" style="width: 100%; border-radius: 12px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); border: 1px solid #e5e7eb;" />
-       </div>`
-    : "";
 
   return `
 <!doctype html>
@@ -155,7 +147,13 @@ module.exports = function generateSolarQuoteHTML(proposal) {
 
   <!-- Graph -->
   <div class="mt-10">
-   ${graphHtml}
+    ${graphImage
+      ? `<div>
+          <h3 class="text-xl font-semibold mb-2 text-gray-700">Savings Graph</h3>
+          <img src="${graphImage}" alt="Graph Image" class="rounded-xl shadow-md border" />
+         </div>`
+      : ''
+    }
   </div>
 
   <!-- Footer -->
