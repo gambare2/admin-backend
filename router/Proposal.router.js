@@ -3,16 +3,20 @@ const router = express.Router();
 const Proposal = require("../models/Proposal.model.js");
 const GraphImage = require("../models/Graph.model.js"); 
 const multer = require("multer");
-
 const chromium = require("@sparticuz/chromium");
 const puppeteer = require("puppeteer-core");
 const path = require("path");
 const fs = require("fs");
 const generateSolarQuoteHTML = require("../template/solarQuoteTemplate.js");
 
-// Multer memory storage for graph upload
+// -------------------
+// Multer Memory Storage for Graph Uploads
+// -------------------
 const storage = multer.memoryStorage();
-const upload = multer({ storage });
+const upload = multer({
+  storage,
+  limits: { fileSize: 50 * 1024 * 1024 } // 50MB
+});
 
 // 📌 Add Proposal
 router.post("/add-proposal", async (req, res) => {
@@ -132,37 +136,30 @@ router.post("/uploadGraph", upload.single("file"), async (req, res) => {
     let contentType = "image/png";
     let filename = `graph-${Date.now()}.png`;
 
-    if (req.file) {
-      // got a file from multipart/form-data
+    if (req.file && req.file.buffer) {
       buffer = req.file.buffer;
       contentType = req.file.mimetype;
       filename = req.file.originalname;
     } else if (req.body.image) {
-      // got base64 string
       const base64Data = req.body.image.replace(/^data:image\/\w+;base64,/, "");
       buffer = Buffer.from(base64Data, "base64");
     } else {
       return res.status(400).json({ error: "No image provided" });
     }
 
-    const graphImage = new GraphImage({
-      filename,
-      contentType,
-      data: buffer
-    });
-
+    const graphImage = new GraphImage({ filename, contentType, data: buffer });
     await graphImage.save();
 
-    res.json({
-      message: "Graph image saved successfully",
-      id: graphImage._id
-    });
+    res.json({ message: "Graph image saved successfully", id: graphImage._id });
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: "Server error" });
   }
 });
 
+// -------------------
+// Get Graph Image by ID
+// -------------------
 router.get("/graph/:id", async (req, res) => {
   try {
     const graph = await GraphImage.findById(req.params.id);
