@@ -87,7 +87,7 @@ module.exports = function generateSolarQuoteHTML(proposal) {
 
   <!-- Hero images -->
   <div class="mt-10 rounded-xl overflow-hidden shadow-lg bg-gray-50">
-    <img src="${API_URL}/assets/generate_logo.jpg" class="w-full h-72 object-cover" alt="Hero" />
+    <img src="${API_URL}/assets/generate_logo.jpg" class="w-full h-72 my-3 object-cover" alt="Hero" />
     <img src="${API_URL}/assets/Solar_Proposal.jpg" class="w-full h-72 object-cover" alt="Hero" />
   </div>
 
@@ -99,163 +99,232 @@ module.exports = function generateSolarQuoteHTML(proposal) {
 
 
 <!-- PAGE 2: WELCOME -->
-<section class="page">
-  <h2 class="text-3xl font-bold "><span class="text-blue-800">Wel</span>come</h2>
-  <h2 class= "text-3xl font-semibold mt-3">Mr. ${proposal.clientName}</h2>
-  <div class="mt-4 text-2xl">Dear <span class="font-semibold">${proposal.clientName}</span>,</div>
-    <p class="mt-4 leading-6 text-xl">
-       It has been a privilege to understand your requirement and give you the best solution for you. As required, we have committed to the highest levelof quality. That’s why we select the best components and industry-leading performance models to ensure your system will produce optimally. Our highly trained installation crews take pride in delivering beautiful well-made solar arrays. From the panels to the bolts on the roof, we’ll deliberately consider every piece of your installation so you can rest easy throughout its many years of service. We take great pride in our guarantee of complete customer satisfaction.
-       We are looking forward to help you and have a long-term relationship with
-       you. Please go through the proposal and give us your feedback.
-    </p>
-    <ul class="list-disc ml-6 mt-4 text-xl">
-      <li>High-efficiency panels with long term performance warranty.</li>
-      <li>Robust hot-dip galvanised elevated structure.</li>
-      <li>Turnkey installation with quality-tested BOS components.</li>
-    </ul>
-   <div class="mt-8 text-xl">
-      <div class= " font-bold">
-          Thanks & Regards,
-       <div class="font-semibold">SUNMAYO PRIVATE LIMITED</div>
-        <div class="text-lg">26/18 Laxmi Garden, Sector 11, Gurgaon, Haryana 122001</div>
-        <div class="text-lg"><img src="${API_URL}/assets/phone-call.png" alt="Logo" class="size-2" />  +91 9643800850 </div>
-        <div class="text-lg"><img src="${API_URL}/assets/communication.png" alt="Logo" class="size-2" />  info@sunmayo.com </div>
-        <div class="text-lg"><img src="${API_URL}/assets/worldwide.png" alt="Logo" class="size-2" /> www.sunmayo.com</div>
-  <div class="page-footer">Page 2 • Welcome</div>
+<section class="page bg-white p-6 rounded-2xl shadow-lg">
+  <!-- Heading -->
+  <h2 class="text-3xl font-bold mb-6">
+    <span class="text-blue-800">Specifications</span> & Savings
+  </h2>
+
+  <!-- Three columns for specs -->
+  <div class="grid grid-cols-3 gap-6 text-xl">
+    <div class="flex flex-col items-start">
+      <p class="font-semibold text-gray-700">Plant Capacity</p>
+      <p class="text-blue-800 font-bold text-2xl">${proposal.projectsize} kW</p>
+      <div class="bg-blue-700 w-20 h-1 mt-1"></div>
+    </div>
+    <div class="flex flex-col items-start">
+      <p class="font-semibold text-gray-700">Structure Type</p>
+      <p class="text-blue-800 font-bold text-2xl">${proposal.proposalStructure}</p>
+      <div class="bg-blue-700 w-20 h-1 mt-1"></div>
+    </div>
+    <div class="flex flex-col items-start">
+      <p class="font-semibold text-gray-700">Inverter</p>
+      <p class="text-blue-800 font-bold text-2xl">
+        ${proposal.invertortype || proposal.InvertorSize}
+      </p>
+      <div class="bg-blue-700 w-20 h-1 mt-1"></div>
+    </div>
+  </div>
+
+  <!-- Savings & generation -->
+  <div class="mt-10 grid grid-cols-3 gap-8 text-center">
+    <div class="flex flex-col items-center">
+      <img src="${API_URL}/assets/solar-power-plant.svg" alt="Solar Plant" class="w-12 h-12 mb-2" />
+      <p class="text-gray-600">Yearly Consumption</p>
+      <p class="text-2xl font-bold text-blue-800">${proposal.yearlyconsumption} kWh</p>
+    </div>
+    <div class="flex flex-col items-center">
+      <img src="${API_URL}/assets/solar-generation.svg" alt="Solar Generation" class="w-12 h-12 mb-2" />
+      <p class="text-gray-600">Estimated Yearly Generation</p>
+      <p class="text-2xl font-bold text-blue-800">${proposal.yearlysolargeneration} kWh</p>
+    </div>
+    <div class="flex flex-col items-center">
+      <img src="${API_URL}/assets/savings-icon.svg" alt="Savings" class="w-12 h-12 mb-2" />
+      <p class="text-gray-600">Average Annual Savings</p>
+      <p class="text-2xl font-bold text-blue-800">₹ ${proposal.annualSavings}</p>
+    </div>
+  </div>
+
+  <!-- Graph -->
+  <div class="mt-10">
+    ${graphImage
+      ? `<div>
+          <h3 class="text-xl font-semibold mb-2 text-gray-700">Savings Graph</h3>
+          <img src="${graphImage}" alt="Graph Image" class="rounded-xl shadow-md border" />
+         </div>`
+      : ''
+    }
+  </div>
+
+  <!-- Footer -->
+  <div class="mt-8 text-sm text-gray-500 text-right">Page 3 • Specs & Savings</div>
 </section>
+
 
 <!-- PAGE 3: SPECIFICATION & SAVINGS -->
-<section class="page">
-  <h2 class="text-2xl font-bold"><span class= "text-blue-800">Specifications</span> & Savings</h2>
-  <div class="mt-4 grid grid-cols-3 gap-4 text-xl">
-    <div>
-      <p class="font-semibold">Plant Capacity</p>
-      <p>${proposal.projectsize} kW</p>
-      <div class="bg-blue-700 w-44 h-1"></div>
-    </div>
-    <div>
-      <p class="font-semibold">Structure Type</p>
-      <p>${proposal.proposalStructure}</p>
-      <div class="bg-blue-700 w-44 h-1"></div>
-    </div>
-    <div>
-      <p class="font-semibold">Inverter</p>
-      <p>${proposal.invertortype || proposal.InvertorSize}</p>
-      <div class="bg-blue-700 w-44 h-1"></div>
-    </div>
-  </div>
-  <div class="mt-4 text-xl flex flex-row justify-between font-semibold">
-    <div class= "flex-col flex">
-      <img src="${API_URL}/assets/solar-power-plant.svg" alt="" class="logo" />
-      <div>
-        <span> Yearly consumption:</span><br/> <span class="font-bold">${proposal.yearlyconsumption} kWh</span><br/>
-      </div>
-    <div>
-    <div class= "flex-col flex">
-      <img src="${API_URL}/assets/solar-generation.svg" alt="" class="logo" />
-      <div>
-        <span>Estimated yearly solar generation: </span><br/><span class="font-bold">${proposal.yearlysolargeneration} kWh</span>
-      </div>
-    <div>
-  </div>
-  <div class="mt-8">
-          ${graphImage ? `<div><h3 class="font-semibold mb-2">Graph</h3><img src="${graphImage}" alt="Graph Image"/></div>` : ''}
-  </div>
-  <div class="page-footer">Page 3 • Specs & Savings</div>
-</section>
 
 <!-- PAGE 4: COMMERCIAL OFFER -->
-<section class="page">
-  <h2 class="text-2xl font-bold">Commercial Offer & Payment</h2>
-    ${tableImage ? `<div><h3 class="font-semibold mb-2">Table</h3><img src="${tableImage}" alt="Table Image"/></div>` : ''}
-  <div class="mt-4 text-xl">
-    <div class = "font-bold">Payment Schedule </div>
-    <ul>
-      <li> As a percentage of the Net Value of System.</li>
-      <li>  30% advance along with PurchaseOrder.</li>
-      <li> 65% Before the Dispatch of material Balance 05% after installation and commissioning.</li>
+<section class="page bg-white p-6 rounded-2xl shadow-lg">
+  <!-- Heading -->
+  <h2 class="text-3xl font-bold mb-6 text-blue-800">Commercial Offer & Payment</h2>
+
+  <!-- Table Image (optional) -->
+  ${tableImage 
+    ? `<div class="mb-6">
+         <h3 class="font-semibold mb-2 text-gray-700">Offer Table</h3>
+         <img src="${tableImage}" alt="Table Image" class="rounded-xl shadow-md border" />
+       </div>` 
+    : ''}
+
+  <!-- Payment Schedule -->
+  <div class="mt-6 text-xl">
+    <div class="font-bold text-gray-800 mb-2 flex items-center gap-2">
+      <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-blue-700" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2v6c0 1.105 1.343 2 3 2s3-.895 3-2v-6c0-1.105-1.343-2-3-2z" />
+      </svg>
+      Payment Schedule
+    </div>
+    <ul class="list-disc list-inside space-y-1 text-gray-700">
+      <li>As a percentage of the Net Value of System.</li>
+      <li><span class="font-semibold">30%</span> advance along with Purchase Order.</li>
+      <li><span class="font-semibold">65%</span> Before dispatch of material, balance <span class="font-semibold">5%</span> after installation and commissioning.</li>
     </ul>
   </div>
-  <div class="mt-4 text-xl">
-    <div class = "font-bold">Payment Details: </div>
-    <p> Payment can be paid in Cheque/ scanner code/ Netbanking</p>
-      <span class="font-semibold">Bank:</span> IDFC FIRST BANK<br/>
-      <span class="font-semibold">A/C:</span> SUNMAYO PRIVATE LIMITED — 10223162147<br/>
-      <span class="font-semibold">IFSC:</span> IDFB0021005
-  </div>
-    <div class="mt-6 text-base">
-      Terms: Prices are firm for 10 days from offer date. Delivery 2–3 weeks. Force majeure applies.
+
+  <!-- Payment Details -->
+  <div class="mt-8 text-xl">
+    <div class="font-bold text-gray-800 mb-2 flex items-center gap-2">
+      <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-blue-700" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a5 5 0 00-10 0v2a2 2 0 00-2 2v6a2 2 0 002 2h10a2 2 0 002-2v-6a2 2 0 00-2-2z" />
+      </svg>
+      Payment Details
     </div>
-    <div class="page-footer">Page 4 • Commercial</div>
+    <p class="text-gray-700 mb-3">Payment can be paid in Cheque / Scanner code / Netbanking</p>
+    <div class="bg-gray-50 p-4 rounded-xl border">
+      <p><span class="font-semibold">Bank:</span> IDFC FIRST BANK</p>
+      <p><span class="font-semibold">A/C:</span> SUNMAYO PRIVATE LIMITED — 10223162147</p>
+      <p><span class="font-semibold">IFSC:</span> IDFB0021005</p>
+    </div>
+  </div>
+
+  <!-- Terms -->
+  <div class="mt-8 text-base text-gray-600 bg-gray-50 p-4 rounded-xl">
+    <p><span class="font-semibold">Terms:</span> Prices are firm for 10 days from offer date. Delivery 2–3 weeks. Force majeure applies.</p>
+  </div>
+
+  <!-- Footer -->
+  <div class="mt-6 text-sm text-gray-500 text-right">Page 4 • Commercial</div>
 </section>
 
+
 <!-- PAGE 5: BILL OF MATERIALS -->
-<section class="page">
-  <h2 class="text-2xl font-bold">Bill of Materials</h2>
-  <div class="mt-4 text-xl">
-    Watt Peak: ${proposal.Wattpeak} Wp<br/>
-    Panel Qty: ${proposal.quantity} Nos<br/>
-    Panel type: ${proposal.paneltype} <br/>
+<section class="page px-10 py-12 bg-white rounded-xl shadow-lg relative">
+  <!-- Heading -->
+  <h2 class="text-2xl font-bold text-gray-800 mb-6">
+    Bill of Materials
+  </h2>
+
+  <!-- Panels Section -->
+  <div class="text-lg text-gray-700 mb-6">
+    <p><span class="font-semibold">Watt Peak:</span> ${proposal.Wattpeak} Wp</p>
+    <p><span class="font-semibold">Panel Qty:</span> ${proposal.quantity} Nos</p>
+    <p><span class="font-semibold">Panel Type:</span> ${proposal.paneltype}</p>
   </div>
-  <div class="bg-blue-700 w-11/12 h-1"></div>
-  <div class="mt-4 text-xl">
-    Inverter: ${proposal.InvertorSize} kW<br/>
-    Phase:  ${proposal.invertorPhase}<br/>
-    Phase QTY:  ${proposal.invertorquantitiy} yrs<br/>
+  <div class="bg-blue-700 w-full h-0.5 mb-6"></div>
+
+  <!-- Inverter Section -->
+  <div class="text-lg text-gray-700 mb-6">
+    <p><span class="font-semibold">Inverter:</span> ${proposal.InvertorSize} kW</p>
+    <p><span class="font-semibold">Phase:</span> ${proposal.invertorPhase}</p>
+    <p><span class="font-semibold">Phase Qty:</span> ${proposal.invertorquantitiy} Nos</p>
   </div>
-  <div class="bg-blue-700 w-11/12 h-1"></div>
-  <div class = "flex flex-row justify-between text-xl">
-    <div class="flex flex-row">
-      <div>
-        <span class = "text-blue-700 text-2xl"> Cable</span><br/>
-        Cable brand: ${proposal.cableBrands}
-      </div>
-      <div class="bg-blue-700 w-1 h-44"></div>
+  <div class="bg-blue-700 w-full h-0.5 mb-6"></div>
+
+  <!-- Cable + Warranty Row -->
+  <div class="grid grid-cols-2 divide-x divide-gray-300 text-lg text-gray-700 mb-6">
+    <!-- Cable -->
+    <div class="pr-6">
+      <h3 class="text-blue-700 text-xl font-semibold mb-2">Cable</h3>
+      <p><span class="font-semibold">Brand:</span> ${proposal.cableBrands}</p>
     </div>
-    <div>
-      <span class = "text-blue-700 text-2xl">Warranty</span><br/>
-      Panel: ${proposal.warranty} Year(s)<br/>
-      Panel Performance : ${proposal.performancewarranty} Years(s)<br/>
-      Invertor : ${proposal.Invertorwarranty}Year(s)<br/>
-      Balance of System: ${proposal.systemwarranty} Year(s)<br/>
+
+    <!-- Warranty -->
+    <div class="pl-6">
+      <h3 class="text-blue-700 text-xl font-semibold mb-2">Warranty</h3>
+      <p><span class="font-semibold">Panel:</span> ${proposal.warranty} Year(s)</p>
+      <p><span class="font-semibold">Panel Performance:</span> ${proposal.performancewarranty} Year(s)</p>
+      <p><span class="font-semibold">Inverter:</span> ${proposal.Invertorwarranty} Year(s)</p>
+      <p><span class="font-semibold">Balance of System:</span> ${proposal.systemwarranty} Year(s)</p>
     </div>
   </div>
-  <div class="mt-4 text-xl">
-    Balance of System:<br/>${proposal.balanceOfSystem}
+
+  <!-- Balance of System -->
+  <div class="text-lg text-gray-700">
+    <h3 class="font-semibold mb-2">Balance of System</h3>
+    <p>${proposal.balanceOfSystem}</p>
   </div>
-  <div class="page-footer">Page 5 • Bill of Materials</div>
+
+  <!-- Footer -->
+  <div class="page-footer absolute bottom-3 right-5 text-sm text-gray-400">
+    Page 5 • Bill of Materials
+  </div>
 </section>
+
 
 <!-- PAGE 6: SCOPE & ACCEPTANCE -->
 <section class="page">
-  <div class= "text-xl">
-    <span class = "font-bold"> Term & Condition</span><br/>
-    <ol>
-      <li>Packing is included in the offer. </li>
-      <li>Transportation charges our scope. </li>
-      <li>Civil and digging are at our scope. </li>
-      <li>Prices quotes are firm and valid for 10 days from the date of offer. After this period a reconfirmation from our office should be taken. </li>
-      <li>Water supply at site will be provided by customer free of cost during the time of installation and commissioning. </li>
-      <li>Closed, covered, locked stores will be provided by customer during the time of installation and commissioning. </li>
-      <li>We will start the approval process as soon as we receive order conformation. From the time of confirmation till 10 days before installation day 1, there will be a nominal cancellation charge of INR 25,000 or 5% of system cost, whichever is higher. </li>
-      <li>Delivery: 2-3 weeks from the date of technically and commercially cleared order. </li>
-      <li>Force Major clause: this quotation as well as the resulting contract are subject to the standard force majeure condition </li>
-      <li>Include lesining charges </li>
-    </0l>
+  <!-- Terms & Conditions -->
+  <div class="text-xl leading-relaxed">
+    <h2 class="font-bold text-2xl mb-4">Terms & Conditions</h2>
+    <ol class="list-decimal list-inside space-y-2">
+      <li>Packing is included in the offer.</li>
+      <li>Transportation charges are in our scope.</li>
+      <li>Civil and digging are in our scope.</li>
+      <li>Prices quoted are firm and valid for 10 days from the date of offer. After this period, reconfirmation from our office is required.</li>
+      <li>Water supply at site will be provided by customer free of cost during installation and commissioning.</li>
+      <li>Closed, covered, locked storage will be provided by customer during installation and commissioning.</li>
+      <li>We will start the approval process as soon as we receive order confirmation. From confirmation until 10 days before installation, cancellation charges of INR 25,000 or 5% of system cost (whichever is higher) will apply.</li>
+      <li>Delivery: 2–3 weeks from the date of technically and commercially cleared order.</li>
+      <li>Force Majeure clause: This quotation and resulting contract are subject to the standard force majeure conditions.</li>
+      <li>Includes licensing charges.</li>
+    </ol>
   </div>
-  <div class="mt-8 grid grid-cols-2 gap-6">
-   <img src="${API_URL}/assets/generate_logo.jpg" alt="Logo" class="w-full h-32" />
+
+  <!-- Divider -->
+  <div class="bg-blue-700 w-full h-0.5 my-8"></div>
+
+  <!-- Signature / Footer -->
+  <div class="grid grid-cols-2 gap-6 items-center">
+    <!-- Logo -->
+    <img src="${API_URL}/assets/generate_logo.jpg" alt="Logo" class="w-40 h-32 object-contain" />
+
+    <!-- Contact Info -->
+    <div class="space-y-2 text-xl">
+      <div class="font-bold">Thanks & Regards,</div>
+      <div class="font-semibold">SUNMAYO PRIVATE LIMITED</div>
+      <div class="text-lg">26/18 Laxmi Garden, Sector 11, Gurgaon, Haryana 122001</div>
+
+      <div class="flex items-center gap-2 text-lg">
+        <img src="${API_URL}/assets/phone-call.png" alt="Phone" class="w-5 h-5" />
+        <span>+91 9643800850</span>
+      </div>
+
+      <div class="flex items-center gap-2 text-lg">
+        <img src="${API_URL}/assets/communication.png" alt="Email" class="w-5 h-5" />
+        <span>info@sunmayo.com</span>
+      </div>
+
+      <div class="flex items-center gap-2 text-lg">
+        <img src="${API_URL}/assets/worldwide.png" alt="Website" class="w-5 h-5" />
+        <span>www.sunmayo.com</span>
+      </div>
+    </div>
   </div>
-  <div class="mt-8 text-xl">
-      <div class= " font-bold">
-          Thanks & Regards, </div>
-            <div class="font-semibold">SUNMAYO PRIVATE LIMITED</div>
-            <div class="text-lg">26/18 Laxmi Garden, Sector 11, Gurgaon, Haryana 122001</div>
-            <div class="text-lg flex flex-row"><img src="${API_URL}/assets/phone-call.png" alt="Logo" class="size-2" />  <span>+91 9643800850</span> </div>
-            <div class="text-lg flex flex-row"><img src="${API_URL}/assets/communication.png" alt="Logo" class="size-2" /><span>  info@sunmayo.com</span> </div>
-            <div class="text-lg flex flex-row"><img src="${API_URL}/assets/worldwide.png" alt="Logo" class="size-2" /> <span>www.sunmayo.com</span></div>
-  
-  <div class="mt-4 text-xs">Date: ____________________</div>
+
+  <!-- Date -->
+  <div class="mt-6 text-sm">Date: ____________________</div>
+
+  <!-- Footer -->
   <div class="page-footer">Page 6 • Scope & Acceptance</div>
 </section>
 
