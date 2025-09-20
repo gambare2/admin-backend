@@ -36,6 +36,8 @@ app.get("/", (req, res) => {
   res.send("✅ Admin server is running");
 });
 
+app.use(express.urlencoded({ limit: '50mb', extended: true }));
+
 // Routes
 app.use("/api/admin", adminRoutes);
 
