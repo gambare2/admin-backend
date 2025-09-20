@@ -8,11 +8,18 @@ module.exports = function generateSolarQuoteHTML(proposal) {
         : `${API_URL}/api/proposal/table/${proposal.tableImage}`)
     : null;
 
-  const graphImage = proposal.graphimage
-    ? (proposal.graphimage.startsWith('data:')
-        ? proposal.graphimage
-        : `${API_URL}/api/proposal/graph/${proposal.graphimage}`)
+    const graphImageUrl = proposal.graphimage
+    ? proposal.graphimage.startsWith("http") || proposal.graphimage.startsWith("data:")
+      ? proposal.graphimage // already a full URL or base64
+      : `${API_URL}/api/proposal/graph/${proposal.graphimage}` // construct URL from MongoDB _id
     : null;
+
+  const graphHtml = graphImageUrl
+    ? `<div>
+         <h3 class="text-xl font-semibold mb-2 text-gray-700">Savings Graph</h3>
+         <img src="${graphImageUrl}" alt="Graph Image" class="rounded-xl shadow-md border" />
+       </div>`
+    : "";
 
   return `
 <!doctype html>
@@ -147,13 +154,7 @@ module.exports = function generateSolarQuoteHTML(proposal) {
 
   <!-- Graph -->
   <div class="mt-10">
-    ${graphImage
-      ? `<div>
-          <h3 class="text-xl font-semibold mb-2 text-gray-700">Savings Graph</h3>
-          <img src="${graphImage}" alt="Graph Image" class="rounded-xl shadow-md border" />
-         </div>`
-      : ''
-    }
+    ${graphHtml}
   </div>
 
   <!-- Footer -->
