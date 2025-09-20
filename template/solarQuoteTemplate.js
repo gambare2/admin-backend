@@ -8,11 +8,24 @@ module.exports = function generateSolarQuoteHTML(proposal) {
         : `${API_URL}/api/proposal/table/${proposal.tableImage}`)
     : null;
 
-  const graphImage = proposal.graphimage
-    ? (proposal.graphimage.startsWith('data:')
-        ? proposal.graphimage
-        : `${API_URL}/api/proposal/graph/${proposal.graphimage}`)
+    const graphImageUrl = proposal.graphimage
+    ? proposal.graphimage.startsWith("http") || proposal.graphimage.startsWith("data:")
+      ? proposal.graphimage // already full URL or base64
+      : `${API_URL}/api/proposal/graph/${proposal.graphimage}` // construct URL from ID
     : null;
+
+  const graphHtml = graphImageUrl
+    ? `<div style="margin-top: 2rem;">
+         <h3 style="font-size: 1.25rem; font-weight: 600; margin-bottom: 0.5rem; color: #374151;">
+           Savings Graph
+         </h3>
+         <img 
+           src="${graphImageUrl}" 
+           alt="Graph Image" 
+           style="width:100%; border-radius: 0.75rem; box-shadow: 0 4px 8px rgba(0,0,0,0.1); border:1px solid #e5e7eb;" 
+         />
+       </div>`
+    : "";
 
   return `
 <!doctype html>
@@ -147,13 +160,8 @@ module.exports = function generateSolarQuoteHTML(proposal) {
 
   <!-- Graph -->
   <div class="mt-10">
-    ${graphImage
-      ? `<div>
-          <h3 class="text-xl font-semibold mb-2 text-gray-700">Savings Graph</h3>
-          <img src="${graphImage}" alt="Graph Image" class="rounded-xl shadow-md border" />
-         </div>`
-      : ''
-    }
+    <h3 class="text-xl font-semibold mb-2 text-gray-700"> Graph</h3>
+    ${graphHtml}
   </div>
 
   <!-- Footer -->
