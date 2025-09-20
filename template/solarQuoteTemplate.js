@@ -87,8 +87,8 @@ module.exports = function generateSolarQuoteHTML(proposal) {
 
   <!-- Hero images -->
   <div class="mt-10 rounded-xl overflow-hidden shadow-lg bg-gray-50">
-    <img src="${API_URL}/assets/generate_logo.jpg" class="w-full h-72 my-3 object-cover" alt="Hero" />
-    <img src="${API_URL}/assets/Solar_Proposal.jpg" class="w-full h-72 object-cover" alt="Hero" />
+    <img src="${API_URL}/assets/generate_logo.jpg" class="w-full h-72 my-3 object-contain" alt="Hero" />
+    <img src="${API_URL}/assets/Solar_Proposal.jpg" class="w-full h-72 object-contain" alt="Hero" />
   </div>
 
   <!-- Footer -->
