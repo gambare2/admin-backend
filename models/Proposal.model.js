@@ -29,6 +29,7 @@ const proposalSchema = new mongoose.Schema(
     proposalStructure: { type: String },
     structureDes: { type: String },
     systemwarranty: { type: String },
+    batteryBrand: {type: String},
 
     stage1: { type: String },
     stage2: { type: String },
