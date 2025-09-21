@@ -4,11 +4,11 @@ const API_URL = process.env.VITE_API_URL || "http://localhost:5000";
 module.exports = function generateSolarQuoteHTML(proposal) {
   const tableImage = proposal.tableImage
     ? (proposal.tableImage.startsWith('data:')
-        ? proposal.tableImage
-        : `${API_URL}/api/proposal/table/${proposal.tableImage}`)
+      ? proposal.tableImage
+      : `${API_URL}/api/proposal/table/${proposal.tableImage}`)
     : null;
 
-    const graphImageUrl = proposal.graphimage
+  const graphImageUrl = proposal.graphimage
     ? proposal.graphimage.startsWith("http") || proposal.graphimage.startsWith("data:")
       ? proposal.graphimage // already a full URL or base64
       : `${API_URL}/api/proposal/graph/${proposal.graphimage}` // construct URL from MongoDB _id
@@ -207,9 +207,11 @@ module.exports = function generateSolarQuoteHTML(proposal) {
             <div>
             </div>
             <div class="mt-8">
-              ${graphImage ? `<div>
-                <h3 class="font-semibold mb-2">Graph</h3><img src="${graphImage}" alt="Graph Image" />
+              ${graphImageUrl ? `<div>
+                <h3 class="font-semibold mb-2">Graph</h3>
+                <img src="${graphImageUrl}" alt="Graph Image" />
               </div>` : ''}
+
             </div>
             <div class="flex flex-row justify-between">
               <img src="${API_URL}/assets/design.png" alt="" class="w-32 h-auto">
