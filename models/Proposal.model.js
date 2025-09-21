@@ -6,6 +6,7 @@ const proposalSchema = new mongoose.Schema(
     clientPhone: { type: String, required: true },
     clientEmail: { type: String, required: true },
     clientAddress: { type: String, required: true },
+    clienttitle: {type: String, required: true},
 
     customerType: { type: String },
     projectsize: { type: String },
@@ -34,12 +35,6 @@ const proposalSchema = new mongoose.Schema(
     stage3: { type: String },
     stage4: { type: String },
 
-    yearlyconsumption: { type: String },
-    yearlysolargeneration: { type: String },
-    decrementgeneration: { type: String },
-    plotgraph: { type: String },
-    directionType: { type: String },
-    priceincrement: { type: String },
     graphType: { type: String },
 
     balanceOfSystem: { type: String },
