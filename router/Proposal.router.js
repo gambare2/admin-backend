@@ -1,13 +1,9 @@
 const express = require("express");
 const router = express.Router();
 const Proposal = require("../models/Proposal.model.js");
-const GraphImage = require("../models/Graph.model.js"); 
 const multer = require("multer");
-const chromium = require("@sparticuz/chromium");
-const puppeteer = require("puppeteer-core");
 const path = require("path");
 const fs = require("fs");
-const generateSolarQuoteHTML = require("../template/solarQuoteTemplate.js");
 
 // -------------------
 // Multer Memory Storage for Graph Uploads
@@ -51,7 +47,7 @@ router.post("/add-proposal", async (req, res) => {
       stage2,
       stage3,
       stage4,
-      graphType, 
+      graphType,
       services,
       products,
       employees,
@@ -59,10 +55,15 @@ router.post("/add-proposal", async (req, res) => {
       ourScope,
       customerScope,
       tableImage,
-      graphimage,
+      graphImage,
+      rows,       
+      gst,        
+      subtotal,   
+      gstAmount,  
+      total,     
     } = req.body;
 
-    // Validation (only required fields)
+    // Validation
     if (!clientName || !clientPhone || !clientEmail || !clientAddress) {
       return res.status(400).json({
         error: "clientName, clientPhone, clientEmail, and clientAddress are required.",
@@ -99,7 +100,7 @@ router.post("/add-proposal", async (req, res) => {
       stage2,
       stage3,
       stage4,
-      graphType, 
+      graphType,
       services: Array.isArray(services) ? services : [],
       products: Array.isArray(products) ? products : [],
       employees: Array.isArray(employees) ? employees : [],
@@ -107,7 +108,12 @@ router.post("/add-proposal", async (req, res) => {
       ourScope,
       customerScope,
       tableImage,
-      graphimage,
+      graphImage,
+      rows: Array.isArray(rows) ? rows : [], // default to empty array
+      gst: gst || 0,
+      subtotal: subtotal || 0,
+      gstAmount: gstAmount || 0,
+      total: total || 0,
     });
 
     await proposal.save();
@@ -121,12 +127,14 @@ router.post("/add-proposal", async (req, res) => {
 });
 
 
+
 // 📌 Upload Graph Image
-router.post("/uploadGraph", upload.single("file"), async (req, res) => {
+router.post("/proposal/:id/uploadGraph", upload.single("file"), async (req, res) => {
   try {
-    let buffer;
-    let contentType = "image/png";
-    let filename = `graph-${Date.now()}.png`;
+    const proposal = await Proposal.findById(req.params.id);
+    if (!proposal) return res.status(404).json({ error: "Proposal not found" });
+
+    let buffer, contentType, filename;
 
     if (req.file && req.file.buffer) {
       buffer = req.file.buffer;
@@ -135,14 +143,22 @@ router.post("/uploadGraph", upload.single("file"), async (req, res) => {
     } else if (req.body.image) {
       const base64Data = req.body.image.replace(/^data:image\/\w+;base64,/, "");
       buffer = Buffer.from(base64Data, "base64");
+      contentType = "image/png";
+      filename = `graph-${Date.now()}.png`;
     } else {
       return res.status(400).json({ error: "No image provided" });
     }
 
-    const graphImage = new GraphImage({ filename, contentType, data: buffer });
-    await graphImage.save();
+    const base64 = buffer.toString("base64");
+    const dataUrl = `data:${contentType};base64,${base64}`;
 
-    res.json({ message: "Graph image saved successfully", id: graphImage._id });
+    proposal.graphImage = dataUrl;
+    await proposal.save();
+
+    res.json({
+      message: "Graph image saved successfully",
+      graphImage: dataUrl,
+    });
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: "Server error" });
@@ -150,20 +166,43 @@ router.post("/uploadGraph", upload.single("file"), async (req, res) => {
 });
 
 // -------------------
-// Get Graph Image by ID
+// Upload Table Image
 // -------------------
-router.get("/graph/:id", async (req, res) => {
+router.post("/:id/uploadTable", async (req, res) => {
   try {
-    const graph = await GraphImage.findById(req.params.id);
-    if (!graph) return res.status(404).send("Not found");
+    const { id } = req.params;
+    const { image } = req.body; // expects base64 string
 
-    res.set("Content-Type", graph.contentType);
-    res.send(graph.data);
+    if (!image) return res.status(400).json({ error: "No image provided" });
+
+    // Match image type
+    const matches = image.match(/^data:image\/(png|jpeg|jpg);base64,(.+)$/);
+    if (!matches) return res.status(400).json({ error: "Not a valid image" });
+
+    const ext = matches[1];
+    const data = matches[2];
+
+    // Convert to buffer
+    const buffer = Buffer.from(data, "base64");
+
+    // Ensure uploads folder exists
+    const uploadDir = path.join(__dirname, "../uploads");
+    if (!fs.existsSync(uploadDir)) fs.mkdirSync(uploadDir, { recursive: true });
+
+    const fileName = `table-${id}.${ext}`;
+    const filePath = path.join(uploadDir, fileName);
+
+    // Save image
+    fs.writeFileSync(filePath, buffer);
+
+    console.log("✅ Image saved:", filePath);
+
+    res.json({ file: fileName });
   } catch (err) {
-    res.status(500).send(err.message);
+    console.error(err);
+    res.status(500).json({ error: "Server error saving image" });
   }
 });
-
 
 // 📌 Update Proposal
 router.put("/:id", async (req, res) => {
@@ -229,49 +268,13 @@ router.delete("/:id", async (req, res) => {
 });
 
 // 📄 Generate Proposal PDF
-router.get("/:id/pdf", async (req, res) => {
-  try {
-    const proposal = await Proposal.findById(req.params.id)
-      .populate("services")
-      .populate("products")
-      .populate("employees");
-
-    if (!proposal) {
-      return res.status(404).json({ error: "Proposal not found" });
-    }
-
-    const html = generateSolarQuoteHTML(proposal);
-
-    const browser = await puppeteer.launch({
-      args: chromium.args,
-      defaultViewport: chromium.defaultViewport,
-      executablePath: await chromium.executablePath(),
-      headless: chromium.headless,
-    });
-
-    const page = await browser.newPage();
-    await page.setContent(html, { waitUntil: "networkidle0" });
-
-    const pdfBuffer = await page.pdf({
-      format: "A4",
-      printBackground: true,
-      margin: { top: "15mm", bottom: "15mm" },
-    });
-
-    await browser.close();
-
-    const fileName = proposal.clientName?.replace(/\s+/g, "_") || "proposal";
-
-    res.set({
-      "Content-Type": "application/pdf",
-      "Content-Disposition": `inline; filename=${fileName}.pdf`,
-    });
-
-    res.send(pdfBuffer);
-  } catch (err) {
-    console.error("PDF Error:", err);
-    res.status(500).json({ error: "Failed to generate PDF" });
-  }
+router.get("/:id/pdfkit", async (req, res) => {
+  const proposalId = req.params.id;
+  await generatePdfProposal(proposalId, res);
 });
+
+
+
+
 
 module.exports = router;

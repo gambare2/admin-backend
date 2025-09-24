@@ -6,6 +6,7 @@ const Product = require("../models/Product.model.js");
 const Service = require("../models/Service.model.js");
 const Employee = require("../models/employee.model.js");
 const Proposal = require("../models/Proposal.model.js");
+const Client = require("../models/client.model.js")
 
 const router = express.Router();
 
@@ -230,6 +231,112 @@ router.post("/employee-login", async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 });
+
+router.get("/search-employee", async (req, res) => {
+  try {
+    const query = req.query.query || "";
+
+    if (!query) {
+      return res.json({ results: [] });
+    }
+
+    // Match name starting with query (case-insensitive)
+    const regex = new RegExp("^" + query, "i");
+    const employees = await Employee.find({ name: regex });
+
+    res.json({ results: employees });
+  } catch (err) {
+    console.error("Search Employee Error:", err);
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
+
+//
+// ------------------ CLIENT ROUTES ------------------
+//
+
+// ➕ Add Client
+router.post("/add-client", async (req, res) => {
+  try {
+    const { nameclient, email, address, phoneno } = req.body;
+    if (!nameclient || !email || !address || !phoneno) {
+      return res.status(400).json({ error: "All fields are required" });
+    }
+
+    // const hashedPassword = await bcrypt.hash(password, 10);
+    const client = new Client({ nameclient, email, address, phoneno });
+    await client.save();
+
+    res.json({ message: "Client added successfully", client });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// Get all client 
+
+router.get("/client", async (req, res) => {
+  try {
+    const clients = await Client.find({}, "-password");
+    res.status(200).json(clients);
+  } catch (err) {
+    res.status(500).json({ error: "Failed to fetch client", details: err.message });
+  }
+});
+
+// delete client 
+router.delete("/clients/:id", async (req, res) => {
+  try {
+    await client.findByIdAndDelete(req.params.id);
+    res.json({ message: "Client Removed successfully" });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// edit client 
+
+router.put("/clients/:id", async (req, res) => {
+  try {
+    const { nameclient, email, address, phoneno } = req.body;
+    const updatedFields = {};
+
+    if (nameclient) updatedFields.nameclient = nameclient;
+    if (email) updatedFields.email = email;
+    if (address) updatedFields.address = address;
+    if (phoneno) updatedFields.phoneno = phoneno;
+
+    const updatedClient = await Client.findByIdAndUpdate(
+      req.params.id,
+      { $set: updatedFields }, 
+      { new: true }
+    );
+
+    if (!updatedClient) {
+      return res.status(404).json({ error: "Client not found" });
+    }
+
+    res.json({ message: "Client edited successfully", client: updatedClient });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+router.get("/search", async (req, res) => {
+  try {
+    const { query } = req.query;
+    if (!query) return res.json({ results: [] });
+
+    const regex = new RegExp(`^${query}`, "i");
+    const results = await Client.find({ nameclient: regex }).limit(20);
+
+    res.json({ results });
+  } catch (err) {
+    console.error("Search route error:", err);
+    res.status(500).json({ results: [] });
+  }
+});
+
 
 
 module.exports = router;

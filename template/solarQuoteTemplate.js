@@ -2,11 +2,11 @@
 const API_URL = process.env.VITE_API_URL || "http://localhost:5000";
 
 module.exports = function generateSolarQuoteHTML(proposal) {
-  const tableImage = proposal.tableImage
-    ? (proposal.tableImage.startsWith('data:')
-      ? proposal.tableImage
-      : `${API_URL}/api/proposal/table/${proposal.tableImage}`)
-    : null;
+  const tableImage = proposal.tableImage 
+  ? (proposal.tableImage.startsWith("data:")
+      ? proposal.tableImage   // already base64
+      : `${API_URL}/api/proposal/table/${proposal.tableImage}`) 
+  : null;
 
   const graphImageUrl = proposal.graphimage
     ? proposal.graphimage.startsWith("http") || proposal.graphimage.startsWith("data:")
@@ -207,10 +207,7 @@ module.exports = function generateSolarQuoteHTML(proposal) {
             <div>
             </div>
             <div class="mt-8">
-              ${graphImageUrl ? `<div>
-                <h3 class="font-semibold mb-2">Graph</h3>
-                <img src="${graphImageUrl}" alt="Graph Image" />
-              </div>` : ''}
+              ${graphHtml}
 
             </div>
             <div class="flex flex-row justify-between">
@@ -224,9 +221,7 @@ module.exports = function generateSolarQuoteHTML(proposal) {
   <!-- PAGE 4: COMMERCIAL OFFER -->
   <section class="page">
     <h2 class="text-2xl font-bold">Commercial Offer & Payment</h2>
-    ${tableImage ? `<div>
-      <h3 class="font-semibold mb-2">Table</h3><img src="${tableImage}" alt="Table Image" />
-    </div>` : ''}
+    ${tableImage ? `<img src="${tableImage}" alt="Table Image" />` : ""}
     <div class="mt-4 text-xl">
       <div class="font-bold">Payment Schedule </div>
       <ul>
